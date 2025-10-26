@@ -1499,51 +1499,51 @@
               </div>
 
               <!-- 📸 Subir fotos -->
-<div>
-  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-    Anexos
-  </label>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Anexos
+                </label>
 
-  <input 
-    type="file" 
-    multiple 
-    accept="image/*" 
-    @change="handleImageUpload"
-    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer 
-           dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" 
-  />
+                <input 
+                  type="file" 
+                  multiple 
+                  accept="image/*" 
+                  @change="handleImageUpload"
+                  class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer 
+                  dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600 focus:outline-none" 
+                />
 
-  <!-- Vista previa cuadrada -->
-  <div v-if="uploadedImages && uploadedImages.length" class="mt-4">
-    <div class="flex flex-wrap gap-3">
-      <div 
-        v-for="(img, index) in uploadedImages" 
-        :key="index" 
-        class="relative group w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem]" 
-      >
-        <!-- Imagen cuadrada -->
-        <img 
-          :src="img.preview" 
-          class="w-full h-full object-cover rounded-md border border-gray-200 dark:border-gray-600 
-                 shadow-sm transition-transform duration-200 group-hover:scale-105"
-          :alt="`Imagen ${index + 1}`"
-        />
+                <!-- Vista previa cuadrada -->
+                <div v-if="uploadedImages && uploadedImages.length" class="mt-4">
+                  <div class="flex flex-wrap gap-3">
+                    <div 
+                      v-for="(img, index) in uploadedImages" 
+                      :key="index" 
+                      class="relative group w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem]" 
+                    >
+                      <!-- Imagen cuadrada -->
+                      <img 
+                        :src="img.preview" 
+                        class="w-full h-full object-cover rounded-md border border-gray-200 dark:border-gray-600 
+                        shadow-sm transition-transform duration-200 group-hover:scale-105"
+                        :alt="`Imagen ${index + 1}`"
+                      />
 
-        <!-- Botón eliminar -->
-        <button 
-          type="button" 
-          @click.stop="removeImage(index)"
-          class="absolute -top-1.5 -right-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full w-5 h-5 
-                 flex items-center justify-center text-xs transition-all duration-200 shadow-md opacity-0 
-                 group-hover:opacity-100 hover:scale-110"
-          title="Eliminar imagen"
-        >
-          ×
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                      <!-- Botón eliminar -->
+                      <button 
+                        type="button" 
+                        @click.stop="removeImage(index)"
+                        class="absolute -top-1.5 -right-1.5 bg-red-600 hover:bg-red-700 text-white rounded-full w-5 h-5 
+                        flex items-center justify-center text-xs transition-all duration-200 shadow-md opacity-0 
+                        group-hover:opacity-100 hover:scale-110"
+                        title="Eliminar imagen"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!-- Fuentes de información -->
               <div class="space-y-2">
@@ -1632,57 +1632,56 @@
         <div v-if="showReport" id="report-content" class="print:shadow-none">
           
           <!-- Header del Reporte -->
-<div class="p-0 print:p-0">
-   <div class="flex items-center justify-center text-center relative print:items-start">
+          <div class="p-0 print:p-0">
+            <div class="flex items-center justify-center text-center relative print:items-start">
 
-    <!-- Logo -->
-    <div class="absolute left-0 flex items-center justify-center 
+              <!-- Logo -->
+              <div class="absolute left-0 flex items-center justify-center 
                 print:relative print:left-auto print:w-auto print:flex-shrink-0">
-      <img src="./Escudo_de_Roatan.png" 
-           alt="Escudo de Roatan" 
-           class="h-10 w-auto sm:h-12 md:h-14 print:h-10 print:w-10">
-    </div>
+                <img src="./Escudo_de_Roatan.png" 
+                     alt="Escudo de Roatan" 
+                     class="h-10 w-auto sm:h-12 md:h-14 print:h-10 print:w-10">
+              </div>
 
-    <!-- Título del Reporte (centrado) -->
-    <div class="flex-1 print:flex-grow print:text-center print:mx-0">
-      <h1 class="text-sm sm:text-base md:text-xl font-bold 
+              <!-- Título del Reporte (centrado) -->
+              <div class="flex-1 print:flex-grow print:text-center print:mx-0">
+                <h1 class="text-sm sm:text-base md:text-xl font-bold 
                  text-gray-900 dark:text-white print:text-black print:text-lg">
-        Reporte Situacional
-      </h1>
-      <h2 class="text-[10px] sm:text-xs md:text-lg font-semibold 
+                  Reporte Situacional
+                </h1>
+                <h2 class="text-[10px] sm:text-xs md:text-lg font-semibold 
                  text-gray-700 dark:text-gray-300 print:text-black print:text-sm">
-        {{ getReportTitle() }}
-      </h2>
-      <p class="text-[9px] sm:text-xs md:text-base 
+                  {{ getReportTitle() }}
+                </h2>
+                <p class="text-[9px] sm:text-xs md:text-base 
                 text-gray-600 dark:text-gray-400 print:text-black print:text-xs">
-        {{ getCurrentDateTime() }}
-      </p>
-    </div>
+                  {{ getCurrentDateTime() }}
+                </p>
+              </div>
 
-<!-- Icono y subtítulo del Reporte -->
-<div class="absolute right-0 top-0 flex flex-col items-center justify-start text-center 
-            w-20 sm:w-24 md:w-32 lg:w-36 
-            print:relative print:right-auto print:w-auto print:flex-shrink-0">
+              <!-- Icono y subtítulo del Reporte -->
+              <div class="absolute right-0 top-0 flex flex-col items-center justify-start text-center 
+                w-20 sm:w-24 md:w-32 lg:w-36 
+                print:relative print:right-auto print:w-auto print:flex-shrink-0">
 
-  <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
-    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
-  </template>
+                <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
+                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                </template>
 
-  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
-    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
-  </template>
+                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
+                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                </template>
 
-  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
-    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
-  </template>
+                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
+                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                </template>
 
-  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
-    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
-  </template>
-</div>
-    
-  </div>
-</div>
+                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
+                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                </template>
+              </div>
+            </div>
+          </div>
 
 
 
@@ -1690,133 +1689,132 @@
           <div class="p-0 print:p-0">
            
            <!-- Reporte Manual -->
-<div v-if="reportCategory === 'manual' && selectedManualReportType">
+            <div v-if="reportCategory === 'manual' && selectedManualReportType">
   
-  <!-- Alerta Meteorológica -->
-  <div v-if="selectedManualReportType === 'weather'"> 
+            <!-- Alerta Meteorológica -->
+            <div v-if="selectedManualReportType === 'weather'"> 
     
-    <!-- Información del Evento -->
-    <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-        INFORMACIÓN DEL EVENTO
-      </h3>
+            <!-- Información del Evento -->
+            <div class="mb-8">
+              <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+                INFORMACIÓN DEL EVENTO
+              </h3>
       
-      <!-- Contenedor wrapper con Flexbox -->
-<div class="flex flex-col sm:flex-row gap-4 seccion-datos">
-  <!-- Datos del Evento -->
-  <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1">
-    <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-blue-800 mb-3">
-      📊 DATOS DEL EVENTO
-    </h4>
-    <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-      <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
-      <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
-        <strong>Zona:</strong> {{ getAffectedZoneText() }}
-      </p>
-      <p v-if="manualReport.weather.duration" class="print:text-black">
-        <strong>Duración:</strong> {{ manualReport.weather.duration }}
-      </p>
-      <p v-if="manualReport.weather.probability" class="print:text-black">
-        <strong>Probabilidad:</strong>
-        {{ manualReport.weather.probability === 'baja' ? 'Baja (≤30%)' : 
+              <!-- Contenedor wrapper con Flexbox -->
+              <div class="flex flex-col sm:flex-row gap-4 seccion-datos">
+                <!-- Datos del Evento -->
+                <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1">
+                  <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-blue-800 mb-3">
+                    📊 DATOS DEL EVENTO
+                  </h4>
+                  <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+                    <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
+                    <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
+                      <strong>Zona:</strong> {{ getAffectedZoneText() }}
+                    </p>
+                    <p v-if="manualReport.weather.duration" class="print:text-black">
+                      <strong>Duración:</strong> {{ manualReport.weather.duration }}
+                    </p>
+                    <p v-if="manualReport.weather.probability" class="print:text-black">
+                      <strong>Probabilidad:</strong>
+                      {{ manualReport.weather.probability === 'baja' ? 'Baja (≤30%)' : 
            manualReport.weather.probability === 'media' ? 'Media (31-70%)' : 
            'Alta (>70%)' }}
-      </p>
-      <p v-if="manualReport.weather.rainfall" class="print:text-black">
-        <strong>Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
-      </p>
-      <p v-if="manualReport.weather.intensity" class="print:text-black">
-        <strong>Intensidad:</strong> {{ manualReport.weather.intensity }}
-      </p>
-      <p v-if="manualReport.weather.impactTime" class="print:text-black">
-        <strong>Impacto:</strong> {{ manualReport.weather.impactTime }}
-      </p>
-    </div>
-  </div>
+                    </p>
+                    <p v-if="manualReport.weather.rainfall" class="print:text-black">
+                      <strong>Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
+                    </p>
+                    <p v-if="manualReport.weather.intensity" class="print:text-black">
+                      <strong>Intensidad:</strong> {{ manualReport.weather.intensity }}
+                    </p>
+                    <p v-if="manualReport.weather.impactTime" class="print:text-black">
+                      <strong>Impacto:</strong> {{ manualReport.weather.impactTime }}
+                    </p>
+                  </div>
+                </div>
 
-  <!-- Nivel de Alerta -->
-  <div
-    :class="[
-    'p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1',
-     manualReport.weather.riskLevel === 'blanco' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
-     manualReport.weather.riskLevel === 'verde' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
-    manualReport.weather.riskLevel === 'amarillo' ? 'bg-yellow-50 dark:bg-yellow-900/20 print:bg-yellow-50 print:dark:bg-yellow-50 text-yellow-900 dark:text-yellow-200 print:text-black' :
-    manualReport.weather.riskLevel === 'rojo' ? 'bg-red-50 dark:bg-red-900/20 print:bg-red-50 print:dark:bg-red-50 text-red-900 dark:text-red-200 print:text-black' : ''
-    ]">         
-    <h4 class="font-bold text-dark-900 dark:text-dark-200 print:text-black mb-3">
-      🚨 NIVEL DE ALERTA
-    </h4>
-    <div class="space-y-1 text-white text-[14px] print:text-[14px] print:space-y-2">
-      <div class="text-center">
-        <div class="text-4xl mb-2">{{ getRiskIcon() }}</div>
-        <p 
-  :class="[
-    'font-bold',
-    manualReport.weather.riskLevel === 'blanco' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
-    manualReport.weather.riskLevel === 'verde' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
-    manualReport.weather.riskLevel === 'amarillo' ? 'text-yellow-900 dark:text-yellow-200 print:text-yellow-900' :
-    manualReport.weather.riskLevel === 'rojo' ? 'text-red-900 dark:text-red-200 print:text-red-900' : ''
-  ]"
->
-  {{ getRiskLevelText() }}
-</p>
-      </div> 
-    </div>
-  </div>
-</div>
+                <!-- Nivel de Alerta -->
+                <div
+                  :class="[
+                    'p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1',
+                    manualReport.weather.riskLevel === 'blanco' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+                    manualReport.weather.riskLevel === 'verde' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+                    manualReport.weather.riskLevel === 'amarillo' ? 'bg-yellow-50 dark:bg-yellow-900/20 print:bg-yellow-50 print:dark:bg-yellow-50 text-yellow-900 dark:text-yellow-200 print:text-black' :
+                    manualReport.weather.riskLevel === 'rojo' ? 'bg-red-50 dark:bg-red-900/20 print:bg-red-50 print:dark:bg-red-50 text-red-900 dark:text-red-200 print:text-black' : ''
+                  ]">         
+                  <h4 class="font-bold text-dark-900 dark:text-dark-200 print:text-black mb-3">
+                    🚨 NIVEL DE ALERTA
+                  </h4>
+                  <div class="space-y-1 text-white text-[14px] print:text-[14px] print:space-y-2">
+                    <div class="text-center">
+                      <div class="text-4xl mb-2">{{ getRiskIcon() }}</div>
+                      <p 
+                        :class="[
+                          'font-bold',
+                          manualReport.weather.riskLevel === 'blanco' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
+                          manualReport.weather.riskLevel === 'verde' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
+                          manualReport.weather.riskLevel === 'amarillo' ? 'text-yellow-900 dark:text-yellow-200 print:text-yellow-900' :
+                          manualReport.weather.riskLevel === 'rojo' ? 'text-red-900 dark:text-red-200 print:text-red-900' : ''
+                        ]"
+                      >
+                        {{ getRiskLevelText() }}
+                      </p>
+                    </div> 
+                  </div>
+                </div>
+              </div>
+            </div>
 
-    </div>
+          </div>
 
-    <!-- Ubicación del Evento -->
-    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-        UBICACIÓN
-      </h3>
-      <div class="h-80 md:h-96 print-map-container">
-        <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
-      </div>
-    </div>
+        <!-- Ubicación del Evento -->
+        <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+            UBICACIÓN
+          </h3>
+          <div class="h-80 md:h-96 print-map-container">
+            <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
+          </div>
+        </div>
 
-    <!-- Descripción -->
-<div class="mb-8">
-  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-    DESCRIPCIÓN
-  </h3>
-  <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
-    <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
-      {{ manualReport.description }}
-    </p>
-  </div>
-</div>
+        <!-- Descripción -->
+        <div class="mb-8">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+            DESCRIPCIÓN
+          </h3>
+          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+            <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.description }}
+            </p>
+          </div>
+        </div>
 
-<!-- Recomendaciones -->
-<div class="mb-8">
-  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-    RECOMENDACIONES PARA LA POBLACIÓN
-  </h3>
-  <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
-    <p class="text-blue-800 dark:text-blue-300 print:text-black text-[15px] print:text-[12px]">
-      {{ manualReport.recommendations }}
-    </p>
-  </div>
-</div>
-  </div>
+       <!-- Recomendaciones -->
+        <div class="mb-8">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+            RECOMENDACIONES PARA LA POBLACIÓN
+          </h3>
+          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+            <p class="text-blue-800 dark:text-blue-300 print:text-black text-[15px] print:text-[12px]">
+            {{ manualReport.recommendations }}
+            </p>
+          </div>
+        </div>
 
-  <!-- Aviso de Seguridad -->
-  <div v-if="selectedManualReportType === 'security'">
-    
-    <!-- Información del Evento -->
-    <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-        INFORMACIÓN DEL EVENTO
-      </h3>
+        <!-- Aviso de Seguridad -->
+        <div v-if="selectedManualReportType === 'security'"> 
+          <!-- Información del Evento -->
+          <div class="mb-8">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+              INFORMACIÓN DEL EVENTO
+            </h3>
       
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
-        <!-- Datos del Evento -->
-        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
-          <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
-            📊 DATOS DEL EVENTO
-          </h4>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
+              <!-- Datos del Evento -->
+              <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+                <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
+                  📊 DATOS DEL EVENTO
+                </h4>
           <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
             <p class="print:text-black"><strong>Tipo:</strong> {{ getSecurityAlertTitle() }}</p>
             <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="print:text-black">
@@ -1840,18 +1838,18 @@
       </div>
     </div>
 
-    <!-- Ubicación -->
-    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+     <!-- Ubicación -->
+     <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
       <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
         <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
       </div>
-    </div>
+     </div>
 
-    <!-- Descripción -->
-    <div class="mb-8">
+     <!-- Descripción -->
+     <div class="mb-8">
       <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
         DESCRIPCIÓN
       </h3>
@@ -1860,10 +1858,10 @@
           {{ manualReport.description }}
         </p>
       </div>
-    </div>
+     </div>
 
-    <!-- Recomendaciones -->
-    <div class="mb-8">
+     <!-- Recomendaciones -->
+     <div class="mb-8">
       <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
@@ -1872,11 +1870,11 @@
           {{ manualReport.recommendations }}
         </p>
       </div>
-    </div>
-  </div>
+     </div>
+   </div>
 
-  <!-- Aviso de Tránsito -->
-  <div v-if="selectedManualReportType === 'traffic'">
+      <!-- Aviso de Tránsito -->
+      <div v-if="selectedManualReportType === 'traffic'">
     
     <!-- Información del Evento -->
     <div class="mb-8">
@@ -1949,13 +1947,13 @@
         </p>
       </div>
     </div>
-  </div>
+      </div>
 
-  <!-- Interrupción de Servicio -->
-  <div v-if="selectedManualReportType === 'public_service'">
+      <!-- Interrupción de Servicio -->
+      <div v-if="selectedManualReportType === 'public_service'">
     
-    <!-- Información del Evento -->
-    <div class="mb-8">
+      <!-- Información del Evento -->
+      <div class="mb-8">
       <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
         INFORMACIÓN DEL EVENTO
       </h3>
@@ -2024,112 +2022,111 @@
     </div>
   </div>
  
-</div>
-
-
-            <!-- Reportes Automáticos -->
-            <div v-if="reportCategory === 'automatic'">
-              <!-- Reporte de Cierre de Turno -->
-              <div v-if="selectedReportType === 'cierre'">
-                <!-- Información del Turno -->
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-    INFORMACIÓN DEL TURNO
-  </h3>
-                  <!-- 📄 Datos generales y estadísticas -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
-  <div
-    class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg 
-           print:border print:border-0 print:ring-1 print:ring-gray-100"
-  >
-    <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
-      📊 DATOS GENERALES
-    </h4>
-    <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-      <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
-      <p class="print:text-black"><strong>Inicio:</strong> {{ activeShift?.startTime || 'No disponible' }}</p>
-      <p class="print:text-black"><strong>Cierre:</strong> {{ getCurrentDateTime() }}</p>
-      <p class="print:text-black"><strong>Total de Eventos:</strong> {{ events.length }}</p>
-    </div>
   </div>
 
-  <div
-    class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg 
-           print:border print:border-0 print:ring-1 print:ring-gray-100"
-  >
-    <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
-      📈 ESTADÍSTICAS
-    </h4>
-    <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-      <p class="print:text-black"><strong>Tiempo Resp. Promedio:</strong> {{ getAverageResponseTimeFiltered() }} min</p>
-      <p class="print:text-black"><strong>Recursos Desplegados:</strong> {{ getTotalResourcesDeployedFiltered() }}</p>
-      <p class="print:text-black"><strong>Cámaras Activas:</strong> {{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
-      <p class="print:text-black"><strong>Eventos Críticos:</strong> {{ getEventsByPriorityFiltered('critica') }}</p>
-    </div>
-  </div>
-</div>
-                  
+
+      <!-- Reportes Automáticos -->
+      <div v-if="reportCategory === 'automatic'">
+        <!-- Reporte de Cierre de Turno -->
+        <div v-if="selectedReportType === 'cierre'">
+          <!-- Información del Turno -->
+          <div class="mb-8">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+              INFORMACIÓN DEL TURNO
+            </h3>
+            <!-- 📄 Datos generales y estadísticas -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
+              <div
+                class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg 
+                       print:border print:border-0 print:ring-1 print:ring-gray-100"
+              >
+                <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
+                  📊 DATOS GENERALES
+                </h4>
+                <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+                  <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
+                  <p class="print:text-black"><strong>Inicio:</strong> {{ activeShift?.startTime || 'No disponible' }}</p>
+                  <p class="print:text-black"><strong>Cierre:</strong> {{ getCurrentDateTime() }}</p>
+                  <p class="print:text-black"><strong>Total de Eventos:</strong> {{ events.length }}</p>
                 </div>
+              </div>
+
+              <div
+                class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg 
+                       print:border print:border-0 print:ring-1 print:ring-gray-100"
+              >
+                <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
+                  📈 ESTADÍSTICAS
+                </h4>
+                <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+                  <p class="print:text-black"><strong>Tiempo Resp. Promedio:</strong> {{ getAverageResponseTimeFiltered() }} min</p>
+                  <p class="print:text-black"><strong>Recursos Desplegados:</strong> {{ getTotalResourcesDeployedFiltered() }}</p>
+                  <p class="print:text-black"><strong>Cámaras Activas:</strong> {{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
+                  <p class="print:text-black"><strong>Eventos Críticos:</strong> {{ getEventsByPriorityFiltered('critica') }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
                 <!-- Resumen por Prioridad -->
-<div class="mb-8">
-  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-    RESUMEN POR PRIORIDAD
-  </h3>
+                <div class="mb-8">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+              RESUMEN POR PRIORIDAD
+            </h3>
 
-  <!-- 🔹 Contenedor flexible con scroll horizontal en móviles -->
-  <div class="flex flex-nowrap gap-2 sm:gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0">
+            <!-- 🔹 Contenedor flexible con scroll horizontal en móviles -->
+            <div class="flex flex-nowrap gap-2 sm:gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0">
     
-    <!-- 🔴 Críticos -->
-    <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-red-50 to-red-100 
+              <!-- 🔴 Críticos -->
+              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-red-50 to-red-100 
                 dark:from-red-900 dark:to-red-800 print:bg-white rounded-xl border border-red-200 
                 dark:border-red-700 print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-2xl sm:text-4xl font-bold text-red-600 dark:text-red-400 print:text-black">
-        {{ getEventsByPriorityFiltered('critica') }}
-      </div>
-      <div class="text-xs sm:text-sm text-red-600 dark:text-red-400 print:text-black mt-2 font-medium">
-        🔴 Críticos
-      </div>
-    </div>
+                <div class="text-2xl sm:text-4xl font-bold text-red-600 dark:text-red-400 print:text-black">
+                  {{ getEventsByPriorityFiltered('critica') }}
+                </div>
+                <div class="text-xs sm:text-sm text-red-600 dark:text-red-400 print:text-black mt-2 font-medium">
+                  🔴 Críticos
+                </div>
+              </div>
 
-    <!-- 🟠 Altos -->
-    <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-orange-50 to-orange-100 
+              <!-- 🟠 Altos -->
+              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-orange-50 to-orange-100 
                 dark:from-orange-900 dark:to-orange-800 print:bg-white rounded-xl border border-orange-200 
                 dark:border-orange-700 print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-2xl sm:text-4xl font-bold text-orange-600 dark:text-orange-400 print:text-black">
-        {{ getEventsByPriorityFiltered('alta') }}
-      </div>
-      <div class="text-xs sm:text-sm text-orange-600 dark:text-orange-400 print:text-black mt-2 font-medium">
-        🟠 Altos
-      </div>
-    </div>
+                <div class="text-2xl sm:text-4xl font-bold text-orange-600 dark:text-orange-400 print:text-black">
+                  {{ getEventsByPriorityFiltered('alta') }}
+                </div>
+                <div class="text-xs sm:text-sm text-orange-600 dark:text-orange-400 print:text-black mt-2 font-medium">
+                  🟠 Altos
+                </div>
+              </div>
 
-    <!-- 🟡 Medios -->
-    <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 
+              <!-- 🟡 Medios -->
+              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 
                 dark:from-yellow-900 dark:to-yellow-800 print:bg-white rounded-xl border border-yellow-200 
                 dark:border-yellow-700 print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-2xl sm:text-4xl font-bold text-yellow-600 dark:text-yellow-400 print:text-black">
-        {{ getEventsByPriorityFiltered('media') }}
-      </div>
-      <div class="text-xs sm:text-sm text-yellow-600 dark:text-yellow-400 print:text-black mt-2 font-medium">
-        🟡 Medios
-      </div>
-    </div>
+                <div class="text-2xl sm:text-4xl font-bold text-yellow-600 dark:text-yellow-400 print:text-black">
+                  {{ getEventsByPriorityFiltered('media') }}
+                </div>
+                <div class="text-xs sm:text-sm text-yellow-600 dark:text-yellow-400 print:text-black mt-2 font-medium">
+                  🟡 Medios
+                </div>
+              </div>
 
-    <!-- 🟢 Bajos -->
-    <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 
+              <!-- 🟢 Bajos -->
+              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 
                 dark:from-green-900 dark:to-green-800 print:bg-white rounded-xl border border-green-200 
                 dark:border-green-700 print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-2xl sm:text-4xl font-bold text-green-600 dark:text-green-400 print:text-black">
-        {{ getEventsByPriorityFiltered('baja') }}
-      </div>
-      <div class="text-xs sm:text-sm text-green-600 dark:text-green-400 print:text-black mt-2 font-medium">
-        🟢 Bajos
-      </div>
-    </div>
+                <div class="text-2xl sm:text-4xl font-bold text-green-600 dark:text-green-400 print:text-black">
+                  {{ getEventsByPriorityFiltered('baja') }}
+                </div>
+                <div class="text-xs sm:text-sm text-green-600 dark:text-green-400 print:text-black mt-2 font-medium">
+                  🟢 Bajos
+                </div>
+              </div>
 
-  </div>
-</div> 
+            </div>
+                </div> 
                 <!-- Detalle de Eventos -->
                 <div class="mb-8" v-if="events.length > 0">
                   <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">DETALLE DE EVENTOS</h3>
@@ -2204,228 +2201,234 @@
                       </h4>
                       
                       <!-- Información de la comunidad -->
-<div class="mb-8">
-  <h3
-    class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100"
-  >
-    📍 EVENTOS DE LA COMUNIDAD
-  </h3>
+                      <div class="mb-8">
+                        <h3
+                          class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100"
+                        >
+                          📍 EVENTOS DE LA COMUNIDAD
+                        </h3>
 
-  <!-- Lista de eventos -->
-  <div class="space-y-4 print:space-y-2">
-    <div
-      v-for="event in getEventsByCommunityDetailed(community.id)"
-      :key="event.code"
-      class="bg-gray-50 dark:bg-gray-600 print:bg-white p-3 rounded-lg border-l-4 border-l-primary print:border-l-black 
-             flex flex-col lg:flex-row justify-between items-stretch gap-3 print:gap-2 print:p-2"
-    >
-      <!-- Información del evento -->
-      <div class="lg:w-[40%] w-full flex flex-col justify-between text-sm print:text-xs print:space-y-0">
-        <div
-          class="flex flex-wrap items-center justify-between mb-2 print:mb-1 border-b border-gray-200 dark:border-gray-500 pb-1 print:pb-0.5"
-        >
-          <div class="flex flex-wrap items-center gap-2 print:gap-1">
-            <span
-              class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-black"
-              >{{ event.code }}</span
-            >
-            <span
-              class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
-              >{{ event.priority.toUpperCase() }}</span
-            >
-            <span
-              class="text-xs text-gray-600 dark:text-gray-400 print:text-black print:text-[0.65rem]"
-              >{{ event.time }}</span
-            >
-          </div>
-          <span
-            class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
-            >{{ getStatusText(event.status) }}</span
-          >
-        </div>
+                        <!-- Lista de eventos -->
+                        <div class="space-y-4 print:space-y-2">
+                          <div
+                            v-for="event in getEventsByCommunityDetailed(community.id)"
+                            :key="event.code"
+                            class="bg-gray-50 dark:bg-gray-600 print:bg-white p-3 rounded-lg border-l-4 border-l-primary print:border-l-black 
+                            flex flex-col lg:flex-row justify-between items-stretch gap-3 print:gap-2 print:p-2"
+                          >
+                          <!-- Información del evento -->
+                          <div class="lg:w-[40%] w-full flex flex-col justify-between text-sm print:text-xs print:space-y-0">
+                            <div
+                              class="flex flex-wrap items-center justify-between mb-2 print:mb-1 border-b border-gray-200 dark:border-gray-500 pb-1 print:pb-0.5"
+                            >
+                              <div class="flex flex-wrap items-center gap-2 print:gap-1">
+                                <span
+                                  class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-black"
+                                  >{{ event.code }}</span
+                                >
+                                <span
+                                  class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
+                                  >{{ event.priority.toUpperCase() }}</span
+                                >
+                                <span
+                                  class="text-xs text-gray-600 dark:text-gray-400 print:text-black print:text-[0.65rem]"
+                                  >{{ event.time }}</span
+                                >
+                              </div>
+                              <span
+                                class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
+                                >{{ getStatusText(event.status) }}</span
+                              >
+                            </div>
 
-        <p
-          class="font-medium text-gray-900 dark:text-white print:text-black mb-1 print:mb-0.5"
-        >
-          {{ getEventTypeName(event.type) }}
-        </p>
-        <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1 print:mb-0.5">
-          <strong>Ubicación:</strong>
-          {{ event.location.neighborhood || 'No especificado' }}
-          <span v-if="event.location.reference">
-            - {{ event.location.reference }}
-          </span>
-        </p>
+                            <p
+                              class="font-medium text-gray-900 dark:text-white print:text-black mb-1 print:mb-0.5"
+                            >
+                              {{ getEventTypeName(event.type) }}
+                            </p>
+                            <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1 print:mb-0.5">
+                              <strong>Ubicación:</strong>
+                              {{ event.location.neighborhood || 'No especificado' }}
+                              <span v-if="event.location.reference">
+                                - {{ event.location.reference }}
+                              </span>
+                            </p>
 
-        <!-- Instituciones y recursos por evento -->
-        <div v-if="getEventInstitutions(event).length > 0" class="mt-2 print:mt-1">
-          <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
-            <strong>Instituciones y Recursos:</strong>
-          </p>
+                            <!-- Instituciones y recursos por evento -->
+                            <div v-if="getEventInstitutions(event).length > 0" class="mt-2 print:mt-1">
+                              <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
+                                <strong>Instituciones y Recursos:</strong>
+                              </p>
         
-          <div class="space-y-1 print:space-y-0.5">
-            <div 
-              v-for="(institution, idx) in getEventInstitutions(event)" 
-              :key="'inst-'+idx"
-              class="flex flex-wrap items-center gap-1"
-            >
-              <!-- Color dinámico según el índice -->
-              <template v-if="idx % 4 === 0">
-                <span 
-                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                >
-                  {{ institution.name }}
-                </span>
-              </template>
-              <template v-else-if="idx % 4 === 1">
-                <span 
-                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
-                >
-                  {{ institution.name }}
-                </span>
-              </template>
-              <template v-else-if="idx % 4 === 2">
-                <span 
-                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
-                >
-                  {{ institution.name }}
-                </span>
-              </template>
-              <template v-else>
-                <span 
-                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
-                >
-                  {{ institution.name }}
-                </span>
-              </template>
+                              <div class="space-y-1 print:space-y-0.5">
+                                <div 
+                                  v-for="(institution, idx) in getEventInstitutions(event)" 
+                                  :key="'inst-'+idx"
+                                  class="flex flex-wrap items-center gap-1"
+                                >
+                                  <!-- Color dinámico según el índice -->
+                                  <template v-if="idx % 4 === 0">
+                                    <span 
+                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                    >
+                                      {{ institution.name }}
+                                    </span>
+                                  </template>
+                                  <template v-else-if="idx % 4 === 1">
+                                    <span 
+                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                    >
+                                      {{ institution.name }}
+                                    </span>
+                                  </template>
+                                  <template v-else-if="idx % 4 === 2">
+                                    <span 
+                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                    >
+                                      {{ institution.name }}
+                                    </span>
+                                  </template>
+                                  <template v-else>
+                                    <span 
+                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
+                                    >
+                                      {{ institution.name }}
+                                    </span>
+                                  </template>
         
-              <!-- Recursos asociados a esta institución -->
-<template v-for="(resource, rIdx) in getEventResources(event)">
-  <span 
-    v-if="resource.fullId && resource.fullId.startsWith(institution.id + '_')"
-    :key="'res-'+idx+'-'+rIdx"
-    :class="[
-      'text-xs px-2 py-1 print:px-1 print:py-0 rounded-full',
-      idx % 4 === 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
-      idx % 4 === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
-      idx % 4 === 2 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
-                     'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200'
-    ]"
-  >
-    {{ resource.name }}
-    <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-black">
-      ({{ resource.specification }})
-    </span>
-  </span>
-</template>
-
-            </div>
-          </div>
-        </div>
-
-
-        <!-- Afectaciones -->
-        <div v-if="hasImpacts(event)" class="mt-2 print:mt-1">
-          <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
-            <strong>Afectaciones:</strong>
-          </p>
-          <p class="text-xs text-gray-700 dark:text-gray-300 print:text-black">
-            {{ getImpactsText(event) }}
-          </p>
-        </div>
-
-        <p
-          v-if="event.coordinates.lat && event.coordinates.lng"
-          class="text-xs text-gray-500 dark:text-gray-400 print:text-black"
-        >
-          <strong>Coordenadas:</strong>
-          {{ event.coordinates.lat.toFixed(6) }},
-          {{ event.coordinates.lng.toFixed(6) }}
-        </p>
-      </div>
-
-      <!-- Mapa (60%) -->
-      <div
-  v-if="event.coordinates.lat && event.coordinates.lng"
-  class="lg:w-[60%] w-full flex justify-center items-center mini-map-container"
->
-  <div
-    :id="`event-mini-map-${event.code}`"
-    class="mini-map w-full h-56 sm:h-64 rounded-md border print:border print:ring-1 print:ring-gray-300"
-  ></div>
-</div> 
-    </div>
-  </div>
-</div>
+                                  <!-- Recursos asociados a esta institución -->
+                                  <template v-for="(resource, rIdx) in getEventResources(event)">
+                                    <span 
+                                      v-if="resource.fullId && resource.fullId.startsWith(institution.id + '_')"
+                                      :key="'res-'+idx+'-'+rIdx"
+                                      :class="[
+                                        'text-xs px-2 py-1 print:px-1 print:py-0 rounded-full',
+                                        idx % 4 === 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                        idx % 4 === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
+                                        idx % 4 === 2 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
+                                        'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200'
+                                      ]"
+                                    >
+                                      {{ resource.name }}
+                                      <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-black">
+                                        ({{ resource.specification }})
+                                      </span>
+                                    </span>
+                                  </template>
+                                </div>
+                              </div>
+                           </div>
 
 
+                        <!-- Afectaciones -->
+                        <div v-if="hasImpacts(event)" class="mt-2 print:mt-1">
+                          <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
+                            <strong>Afectaciones:</strong>
+                          </p>
+                          <p class="text-xs text-gray-700 dark:text-gray-300 print:text-black">
+                            {{ getImpactsText(event) }}
+                          </p>
+                        </div>
+
+                        <p
+                          v-if="event.coordinates.lat && event.coordinates.lng"
+                          class="text-xs text-gray-500 dark:text-gray-400 print:text-black"
+                        >
+                          <strong>Coordenadas:</strong>
+                          {{ event.coordinates.lat.toFixed(6) }},
+                          {{ event.coordinates.lng.toFixed(6) }}
+                        </p>
+                      </div>
+
+                        <!-- Mapa (60%) -->
+                        <div
+                          v-if="event.coordinates.lat && event.coordinates.lng"
+                          class="lg:w-[60%] w-full flex justify-center items-center mini-map-container" >
+                          <div
+                            :id="`event-mini-map-${event.code}`"
+                            class="mini-map w-full h-56 sm:h-64 rounded-md border print:border print:ring-1 print:ring-gray-300">
+                          </div>
+                        </div> 
+                      </div>
                     </div>
-                  </div>
+                  </div> 
                 </div>
               </div>
             </div>
+          </div>
+          </div>
             
             <!-- Sección de imágenes globales (ANEXOS) -->
-<div v-if="uploadedImages && uploadedImages.length > 0" class="mb-0">
-  <h3 class="text-[10px] sm:text-sm font-semibold mb-2 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-1 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
-    ANEXOS
-  </h3>
+            <div v-if="uploadedImages && uploadedImages.length > 0" class="mb-0">
+              <h3 class="text-[10px] sm:text-sm font-semibold mb-2 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-1 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+                ANEXOS
+              </h3>
 
-  <!-- Contenedor general para todas las imágenes -->
-  <div class="overflow-y-auto pb-0 mb-12 print:mb-4">
-    <div class="flex flex-wrap gap-3 justify-start items-start">
-     <div
-        v-for="(img, index) in uploadedImages"
-        :key="'img-' + index"
-        class="relative group print:break-inside-avoid"
-      >
-        <!-- Imagen cuadrada -->
-        <div class="w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem] rounded-md overflow-hidden flex items-center justify-center"> 
-          <img 
-            :src="img.preview" 
-            class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 rounded-md"
-          />
-        </div>
+              <!-- Contenedor general para todas las imágenes -->
+              <div class="overflow-y-auto pb-0 mb-12 print:mb-4">
+                <div class="flex flex-wrap gap-3 justify-start items-start">
+                  <div
+                    v-for="(img, index) in uploadedImages"
+                    :key="'img-' + index"
+                    class="relative group print:break-inside-avoid"
+                  >
+                    <!-- Imagen cuadrada -->
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem] rounded-md overflow-hidden flex items-center justify-center"> 
+                      <img 
+                        :src="img.preview" 
+                        class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 rounded-md"
+                      />
+                    </div>
 
-        <!-- Botón eliminar -->
-        <button
-          @click="removeImage(index)"
-          class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 
+                    <!-- Botón eliminar -->
+                    <button
+                      @click="removeImage(index)"
+                      class="absolute top-1 right-1 bg-red-500 hover:bg-red-600 text-white rounded-full w-5 h-5 
                  flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 text-xs print:hidden"
-          title="Eliminar imagen"
-        >
-          ×
-        </button>
-      </div>
-  </div>
-</div> 
-</div>
- 
-    <!-- Footer del Reporte -->
-           <div class="text-center text-sm text-gray-500 dark:text-gray-400 p-6 border-t border-gray-200 dark:border-gray-600 mt-8">
-               <div class="max-w-3xl mx-auto">
-                   <div v-if="sources.length > 0" class="flex flex-col items-center space-y-2 mb-4">
-                       <span class="font-medium text-gray-500 dark:text-gray-400">🌐 Fuentes:</span>
-                       <div class="flex flex-wrap justify-center items-center gap-2">
-                           <template v-for="(source, index) in sources" :key="source.id">
-                               <a :href="source.url" target="_blank" rel="noopener noreferrer" 
-                                  class="text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap">
-                                   {{ source.url }}
-                               </a>
-                               <span v-if="index < sources.length - 1" class="text-gray-400 dark:text-gray-500">|</span>
-                           </template>
-                       </div>
-                   </div>
-                   <p>Municipalidad de Roatán</p>
-                   <p>📞 Emergencias: *1101</p>
-                   <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p> 
-                   <p>Documento generado el {{ getCurrentDateTime() }}</p>
-               </div>
-           </div>
-           
+                      title="Eliminar imagen"
+                    >
+                      ×
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div> 
+
+            <!-- Footer del Reporte -->
+            <div 
+              class="text-center text-sm text-gray-500 dark:text-gray-400 p-6 border-t border-gray-200 dark:border-gray-600 mt-8 print-footer">
+              <div class="max-w-3xl mx-auto">
+                <div v-if="sources.length > 0" class="flex flex-col items-center space-y-2 mb-4">
+                  <span class="font-medium text-gray-500 dark:text-gray-400">🌐 Fuentes:</span>
+                  <div class="flex flex-wrap justify-center items-center gap-2">
+                    <template v-for="(source, index) in sources" :key="source.id">
+                      <a 
+                        :href="source.url" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap"
+                      >
+                        {{ source.url }}
+                      </a>
+                      <span 
+                        v-if="index < sources.length - 1" 
+                        class="text-gray-400 dark:text-gray-500"
+                      >|</span>
+                    </template>
+                  </div>
+                </div>
+
+                <p>Municipalidad de Roatán</p>
+                <p>📞 Emergencias: *1101</p>
+                <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p> 
+                <p>Documento generado el {{ getCurrentDateTime() }}</p>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -4302,11 +4305,14 @@ removeSource(index) {
     margin-right: 10px;
   } 
    
+@media print {
+  @page {
+    size: A4;
+    margin: 1cm 1cm 1cm 1cm;
+  }
+
   .print-footer {
-    display: block !important;
-    position: fixed !important;
-    margin: 20px 0 0 0 !important;
-    padding: 10px 0 0 0 !important;
+    display: block !important; 
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -4319,7 +4325,9 @@ removeSource(index) {
     text-align: center !important;
     font-size: 0.9em !important;
     color: #1e40af !important;
-  }
+  } 
+}
+
   
   /* Asegurar que los contenedores no tengan márgenes ni padding */
   .container, .mx-auto, .p-4, .p-6, .px-4, .py-4, .m-4, .my-4, .mx-4 {
