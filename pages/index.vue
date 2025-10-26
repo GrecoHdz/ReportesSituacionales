@@ -457,14 +457,13 @@
 
         </div>
 
-        <!-- Footer del Dashboard para Impresión -->
-        <div class="dashboard-print-footer print:block hidden">
-          <div class="text-center text-sm text-black p-4 border-t border-gray-300 mt-8">
-            <p>Municipalidad de Roatán</p>
-            <p>📞 Número de Emergencias: *1101</p>
-            <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p>
-          </div>
-        </div>
+<!-- Footer del Dashboard para Impresión -->
+<div class="dashboard-print-footer print:block hidden">
+  <p>Municipalidad de Roatán</p>
+  <p>📞 Número de Emergencias: *1101</p>
+  <p><strong>Centro de Monitoreo Joseph Solomon</strong></p>
+</div>
+
       </div>
 
       <!-- Turno Tab -->
@@ -479,6 +478,22 @@
                 <p class="text-yellow-800 dark:text-yellow-200 font-bold text-base sm:text-lg">Complete la configuración antes de iniciar turno</p>
                 <p class="text-yellow-700 dark:text-yellow-300 text-sm sm:text-base">Debe configurar recursos institucionales y sistema de videovigilancia.</p>
               </div>
+            </div>
+          </div>
+
+          <!-- Botón para iniciar turno -->
+          <div class="form-section">
+            <div class="flex justify-center">
+              <button @click="validateAndInitiateTurn" :disabled="!canInitiateTurn()" 
+                      :class="canInitiateTurn() ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'"
+                      class="text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-8 w-full sm:w-auto">
+                ▶ Iniciar Turno
+              </button>
+            </div>
+            <div v-if="!canInitiateTurn()" class="text-center mt-4">
+              <p class="text-red-600 dark:text-red-400 text-sm">
+                Debe completar la configuración de recursos y cámaras antes de iniciar el turno
+              </p>
             </div>
           </div>
 
@@ -572,22 +587,6 @@
   </div>
 </div>
 
-
-          <!-- Botón para iniciar turno -->
-          <div class="form-section">
-            <div class="flex justify-center">
-              <button @click="validateAndInitiateTurn" :disabled="!canInitiateTurn()" 
-                      :class="canInitiateTurn() ? 'btn-primary' : 'btn-secondary opacity-50 cursor-not-allowed'"
-                      class="text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-8 w-full sm:w-auto">
-                ▶ Iniciar Turno
-              </button>
-            </div>
-            <div v-if="!canInitiateTurn()" class="text-center mt-4">
-              <p class="text-red-600 dark:text-red-400 text-sm">
-                Debe completar la configuración de recursos y cámaras antes de iniciar el turno
-              </p>
-            </div>
-          </div>
         </div>
 
         <!-- Configuración del Turno (solo visible cuando hay turno activo) -->
@@ -777,7 +776,7 @@
             <!-- Instituciones y Recursos -->
             <div class="input-group">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">🚓 Instituciones y Recursos</h3>
-              <div class="space-y-4">
+              <div class="space-y-4 print:space-y-2">
                 <div v-for="institution in institutions" :key="institution.id"
                      class="bg-gray-50 dark:bg-gray-600 rounded-lg p-4">
                   <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-3">
@@ -871,7 +870,7 @@
             <div v-for="(event, index) in currentShiftEvents" :key="index"
                  class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
               <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 space-y-2 xl:space-y-0">
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2 print:gap-1">
                   <span class="text-base font-bold text-primary bg-blue-100 dark:bg-blue-900 px-3 py-1 rounded-lg">{{ event.code }}</span>
                   <span class="text-sm font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-600 px-3 py-1 rounded-lg">{{ event.time }}</span>
                   <span :class="getPriorityBadgeClass(event.priority)"
@@ -884,7 +883,7 @@
                     {{ getStatusText(event.status) }}
                   </span>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2 print:gap-1">
                   <button @click="editEventStatus(event)"
                           class="px-3 py-2 text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center space-x-2">
                     <span>⚙️</span>
@@ -1026,7 +1025,7 @@
             <div v-for="(event, index) in getFilteredHistorialEvents()" :key="`historial_${index}`"
                  class="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl p-4 sm:p-6 hover:shadow-lg transition-all duration-300">
               <div class="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-4 space-y-2 xl:space-y-0">
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2 print:gap-1">
                   <span class="text-base font-bold text-primary bg-blue-100 dark:bg-blue-900 px-3 py-1 rounded-lg">{{ event.code }}</span>
                   <span class="text-sm font-medium text-gray-900 dark:text-white bg-gray-100 dark:bg-gray-600 px-3 py-1 rounded-lg">{{ event.date }} - {{ event.time }}</span>
                   <span :class="getPriorityBadgeClass(event.priority)"
@@ -1039,7 +1038,7 @@
                     {{ getStatusText(event.status) }}
                   </span>
                 </div>
-                <div class="flex flex-wrap items-center gap-2">
+                <div class="flex flex-wrap items-center gap-2 print:gap-1">
                   <button v-if="event.coordinates.lat && event.coordinates.lng" @click="showEventOnMap(event)"
                           class="px-3 py-2 text-sm bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors flex items-center space-x-2">
                     <span>🗺</span>
@@ -1484,7 +1483,7 @@
               </div>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-4 print:space-y-2">
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descripción Detallada</label>
                 <textarea v-model="manualReport.description" rows="4"
@@ -1520,7 +1519,7 @@
       <div 
         v-for="(img, index) in uploadedImages" 
         :key="index" 
-        class="relative group w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32"
+        class="relative group w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem]" 
       >
         <!-- Imagen cuadrada -->
         <img 
@@ -1594,7 +1593,7 @@
                   <button 
                     type="button" 
                     @click="saveSource"
-                    class="px-3 py-2 bg-primary text-white rounded-r-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
+                    class="text-blue-400 px-3 py-2 bg-primary text-dark rounded-r-lg hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50"
                   >
                     Guardar
                   </button>
@@ -1660,47 +1659,28 @@
       </p>
     </div>
 
-    <!-- Icono y subtítulo del Reporte -->
-    <div class="absolute right-0 top-0 flex flex-col items-center justify-start text-center 
-                w-20 sm:w-24 md:w-32 lg:w-36 
-                print:relative print:right-auto print:w-auto print:flex-shrink-0">
+<!-- Icono y subtítulo del Reporte -->
+<div class="absolute right-0 top-0 flex flex-col items-center justify-start text-center 
+            w-20 sm:w-24 md:w-32 lg:w-36 
+            print:relative print:right-auto print:w-auto print:flex-shrink-0">
 
-      <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
-        <div class="text-2xl sm:text-3xl mb-1 print:text-2xl">⚠️</div>
-        <h3 class="text-[7px] sm:text-xs md:text-sm lg:text-base font-semibold 
-                   print:text-xs print:text-black text-gray-700 dark:text-gray-300 break-words leading-tight">
-          {{ getRiskLevelText() }}
-        </h3>
-        <p class="text-[6px] sm:text-xs md:text-sm print:text-[6px] 
-                  print:text-black text-gray-600 dark:text-gray-400 break-words leading-tight">
-          {{ getWeatherAlertTitle() }}
-        </p>
-      </template>
+  <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
+    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+  </template>
 
-      <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
-        <div class="text-2xl sm:text-3xl md:text-4xl mb-1 print:text-2xl">🚨</div>
-        <h3 class="text-[8px] sm:text-xs md:text-sm lg:text-base font-semibold 
-                   print:text-xs print:text-black text-gray-700 dark:text-gray-300 break-words leading-tight">
-          Aviso de Seguridad
-        </h3>
-      </template>
+  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
+    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+  </template>
 
-      <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
-        <div class="text-2xl sm:text-3xl md:text-4xl mb-1 print:text-2xl">🚦</div>
-        <h3 class="text-[8px] sm:text-xs md:text-sm lg:text-base font-semibold 
-                   print:text-xs print:text-black text-gray-700 dark:text-gray-300 break-words leading-tight">
-          Aviso de Tránsito
-        </h3>
-      </template>
+  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
+    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+  </template>
 
-      <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
-        <div class="text-2xl sm:text-3xl md:text-4xl mb-1 print:text-2xl">🔧</div>
-        <h3 class="text-[8px] sm:text-xs md:text-sm lg:text-base font-semibold 
-                   print:text-xs print:text-black text-gray-700 dark:text-gray-300 break-words leading-tight">
-          Interrupción de Servicio
-        </h3>
-      </template>
-    </div>
+  <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
+    <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+  </template>
+</div>
+    
   </div>
 </div>
 
@@ -1710,198 +1690,342 @@
           <div class="p-0 print:p-0">
            
            <!-- Reporte Manual -->
-            <div v-if="reportCategory === 'manual' && selectedManualReportType">
-              <!-- Alerta Meteorológica -->
-              <div v-if="selectedManualReportType === 'weather'"> 
-
-                 <!-- En reportes Manual, poner INFORMACIÓN DEL EVENTO y NIVEL DE ALERTA con igual altura -->
-            <div class="grid grid-cols-2 gap-4 mb-6 print:grid-cols-2 print:gap-3 print:mb-4 items-stretch">
-
-            <!-- Información del Evento -->
-            <div class="bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 
-              print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none 
-              h-full flex flex-col">
-            <h4 class="font-bold text-blue-900 dark:text-blue-200 mb-1 sm:mb-2 text-[8px] sm:text-xs 
-               print:text-black print:text-xs print:font-bold print:mb-1">
-      📊 INFORMACIÓN DEL EVENTO
-              </h4>
-              <div class="space-y-0.5 sm:space-y-1 text-[8px] sm:text-xs text-gray-700 dark:text-gray-300 
-                print:text-black print:text-[10px] print:leading-tight flex-1">
-      <p class="print:py-0.5"><strong class="font-semibold print:font-semibold">Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
-      <p v-if="manualReport.weather.affectedZones?.length" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Zona:</strong> {{ getAffectedZoneText() }}
+<div v-if="reportCategory === 'manual' && selectedManualReportType">
+  
+  <!-- Alerta Meteorológica -->
+  <div v-if="selectedManualReportType === 'weather'"> 
+    
+    <!-- Información del Evento -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        INFORMACIÓN DEL EVENTO
+      </h3>
+      
+      <!-- Contenedor wrapper con Flexbox -->
+<div class="flex flex-col sm:flex-row gap-4 seccion-datos">
+  <!-- Datos del Evento -->
+  <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1">
+    <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-blue-800 mb-3">
+      📊 DATOS DEL EVENTO
+    </h4>
+    <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+      <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
+      <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
+        <strong>Zona:</strong> {{ getAffectedZoneText() }}
       </p>
-      <p v-if="manualReport.weather.duration" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Duración:</strong> {{ manualReport.weather.duration }}
+      <p v-if="manualReport.weather.duration" class="print:text-black">
+        <strong>Duración:</strong> {{ manualReport.weather.duration }}
       </p>
-      <p v-if="manualReport.weather.rainfall" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
-      </p>
-      <p v-if="manualReport.weather.intensity" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Intensidad:</strong> {{ manualReport.weather.intensity }}
-      </p>
-      <p v-if="manualReport.weather.impactTime" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Impacto:</strong> {{ manualReport.weather.impactTime }}
-      </p>
-      <p v-if="manualReport.weather.probability" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Probabilidad:</strong>
+      <p v-if="manualReport.weather.probability" class="print:text-black">
+        <strong>Probabilidad:</strong>
         {{ manualReport.weather.probability === 'baja' ? 'Baja (≤30%)' : 
            manualReport.weather.probability === 'media' ? 'Media (31-70%)' : 
            'Alta (>70%)' }}
       </p>
-      <p v-if="manualReport.weather.notes" class="print:py-0.5">
-        <strong class="font-semibold print:font-semibold">Notas:</strong> {{ manualReport.weather.notes }}
+      <p v-if="manualReport.weather.rainfall" class="print:text-black">
+        <strong>Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
+      </p>
+      <p v-if="manualReport.weather.intensity" class="print:text-black">
+        <strong>Intensidad:</strong> {{ manualReport.weather.intensity }}
+      </p>
+      <p v-if="manualReport.weather.impactTime" class="print:text-black">
+        <strong>Impacto:</strong> {{ manualReport.weather.impactTime }}
       </p>
     </div>
   </div>
 
   <!-- Nivel de Alerta -->
-  <div class="bg-blue-50 dark:bg-blue-900/20 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600 
-              print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none 
-              h-full flex flex-col items-center justify-center text-center">
-    <h4 class="font-bold text-red-900 dark:text-red-200 mb-1 sm:mb-2 text-[9px] sm:text-xs 
-               print:text-black print:text-xs print:font-bold print:mb-1">
+  <div
+    :class="[
+    'p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1',
+     manualReport.weather.riskLevel === 'blanco' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+     manualReport.weather.riskLevel === 'verde' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+    manualReport.weather.riskLevel === 'amarillo' ? 'bg-yellow-50 dark:bg-yellow-900/20 print:bg-yellow-50 print:dark:bg-yellow-50 text-yellow-900 dark:text-yellow-200 print:text-black' :
+    manualReport.weather.riskLevel === 'rojo' ? 'bg-red-50 dark:bg-red-900/20 print:bg-red-50 print:dark:bg-red-50 text-red-900 dark:text-red-200 print:text-black' : ''
+    ]">         
+    <h4 class="font-bold text-dark-900 dark:text-dark-200 print:text-black mb-3">
       🚨 NIVEL DE ALERTA
     </h4>
-    <div class="flex flex-col items-center justify-center flex-1">
-      <div class="text-2xl sm:text-3xl mb-1 print:text-3xl">{{ getRiskIcon() }}</div>
-      <p class="font-bold text-[9px] sm:text-xs text-gray-900 dark:text-white print:text-black print:text-xs">
-        {{ getRiskLevelText() }}
-      </p>
+    <div class="space-y-1 text-white text-[14px] print:text-[14px] print:space-y-2">
+      <div class="text-center">
+        <div class="text-4xl mb-2">{{ getRiskIcon() }}</div>
+        <p 
+  :class="[
+    'font-bold',
+    manualReport.weather.riskLevel === 'blanco' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
+    manualReport.weather.riskLevel === 'verde' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
+    manualReport.weather.riskLevel === 'amarillo' ? 'text-yellow-900 dark:text-yellow-200 print:text-yellow-900' :
+    manualReport.weather.riskLevel === 'rojo' ? 'text-red-900 dark:text-red-200 print:text-red-900' : ''
+  ]"
+>
+  {{ getRiskLevelText() }}
+</p>
+      </div> 
     </div>
   </div>
 </div>
 
-                <!-- Mapa -->
-                <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">
-                    UBICACIÓN
-                  </h3>
-                  <div class="h-80 md:h-96 print-map-container">
-                    <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
-                  </div>
-                </div> 
+    </div>
 
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">DESCRIPCIÓN</h3>
-                  <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-gray-700 dark:text-gray-300 print:text-black">{{ manualReport.description }}</p>
-                  </div>
-                </div>
+    <!-- Ubicación del Evento -->
+    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        UBICACIÓN
+      </h3>
+      <div class="h-80 md:h-96 print-map-container">
+        <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
+      </div>
+    </div>
 
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">RECOMENDACIONES PARA LA POBLACIÓN</h3>
-                  <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-blue-800 dark:text-blue-300 print:text-black">{{ manualReport.recommendations }}</p>
-                  </div>
-                </div>
-              </div>
+    <!-- Descripción -->
+<div class="mb-8">
+  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+    DESCRIPCIÓN
+  </h3>
+  <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+    <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
+      {{ manualReport.description }}
+    </p>
+  </div>
+</div>
 
-              <!-- Aviso de Seguridad -->
-              <div v-if="selectedManualReportType === 'security'">
-                <div class="alert-banner text-center mb-8 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                  <div class="text-4xl mb-2">🚨</div>
-                  <h3 class="text-2xl font-bold print:text-black">AVISO DE SEGURIDAD</h3>
-                  <p class="text-lg print:text-black">{{ getSecurityAlertTitle() }}</p>
-                </div>
+<!-- Recomendaciones -->
+<div class="mb-8">
+  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+    RECOMENDACIONES PARA LA POBLACIÓN
+  </h3>
+  <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+    <p class="text-blue-800 dark:text-blue-300 print:text-black text-[15px] print:text-[12px]">
+      {{ manualReport.recommendations }}
+    </p>
+  </div>
+</div>
+  </div>
 
-                <!-- Mapa en el reporte si hay coordenadas -->
-                <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">UBICACIÓN</h3>
-                  <div class="print-map-container">
-                    <div id="report-map" style="height: 400px; border-radius: 8px;" class="mb-4 print-visible-map"></div>
-                  </div>
-                </div>
+  <!-- Aviso de Seguridad -->
+  <div v-if="selectedManualReportType === 'security'">
+    
+    <!-- Información del Evento -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        INFORMACIÓN DEL EVENTO
+      </h3>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
+        <!-- Datos del Evento -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
+            📊 DATOS DEL EVENTO
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <p class="print:text-black"><strong>Tipo:</strong> {{ getSecurityAlertTitle() }}</p>
+            <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="print:text-black">
+              <strong>Coordenadas:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
+            </p>
+          </div>
+        </div>
 
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">DESCRIPCIÓN</h3>
-                  <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-gray-700 dark:text-gray-300 print:text-black">{{ manualReport.description }}</p>
-                    <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="text-sm text-gray-600 dark:text-gray-400 print:text-black mt-3">
-                      <strong>Coordenadas del evento:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">RECOMENDACIONES PARA LA POBLACIÓN</h3>
-                  <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-lg border border-red-200 dark:border-red-800 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-red-800 dark:text-red-300 print:text-black">{{ manualReport.recommendations }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Aviso de Tránsito -->
-              <div v-if="selectedManualReportType === 'traffic'">
-                <div class="alert-banner text-center mb-8 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                  <div class="text-4xl mb-2">🚦</div>
-                  <h3 class="text-2xl font-bold print:text-black">AVISO DE TRÁNSITO</h3>
-                  <p class="text-lg print:text-black">{{ getTrafficAlertTitle() }}</p>
-                </div>
-
-                <!-- Mapa en el reporte si hay coordenadas -->
-                <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">UBICACIÓN</h3>
-                  <div class="print-map-container">
-                    <div id="report-map" style="height: 400px; border-radius: 8px;" class="mb-4 print-visible-map"></div>
-                  </div>
-                </div>
-
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">DESCRIPCIÓN</h3>
-                  <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-gray-700 dark:text-gray-300 print:text-black">{{ manualReport.description }}</p>
-                    <p v-if="manualReport.traffic.duration" class="text-sm text-gray-600 dark:text-gray-400 print:text-black mt-3">
-                      <strong>Duración estimada:</strong> {{ manualReport.traffic.duration }}
-                    </p>
-                    <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="text-sm text-gray-600 dark:text-gray-400 print:text-black mt-1">
-                      <strong>Coordenadas del evento:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">RECOMENDACIONES PARA LA POBLACIÓN</h3>
-                  <div class="bg-orange-50 dark:bg-orange-900/20 p-6 rounded-lg border border-orange-200 dark:border-orange-800 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-orange-800 dark:text-orange-300 print:text-black">{{ manualReport.recommendations }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Interrupción de Servicio -->
-              <div v-if="selectedManualReportType === 'public_service'">
-                <div class="alert-banner text-center mb-8 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                  <div class="text-4xl mb-2">🔧</div>
-                  <h3 class="text-2xl font-bold print:text-black">INTERRUPCIÓN DE SERVICIO</h3>
-                  <p class="text-lg print:text-black">{{ getPublicServiceAlertTitle() }}</p>
-                </div>
-
-                <!-- Mapa en el reporte si hay coordenadas -->
-                <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">UBICACIÓN</h3>
-                  <div class="print-map-container">
-                    <div id="report-map" style="height: 400px; border-radius: 8px;" class="mb-4 print-visible-map"></div>
-                  </div>
-                </div>
-
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">DESCRIPCIÓN</h3>
-                  <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-gray-700 dark:text-gray-300 print:text-black">{{ manualReport.description }}</p>
-                    <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="text-sm text-gray-600 dark:text-gray-400 print:text-black mt-3">
-                      <strong>Coordenadas del evento:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
-                    </p>
-                  </div>
-                </div>
-
-                <div class="mb-8">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">RECOMENDACIONES PARA LA POBLACIÓN</h3>
-                  <div class="bg-purple-50 dark:bg-purple-900/20 p-6 rounded-lg border border-purple-200 dark:border-purple-800 print:bg-white print:border print:border-0 print:ring-1 print:ring-gray-100">
-                    <p class="text-purple-800 dark:text-purple-300 print:text-black">{{ manualReport.recommendations }}</p>
-                  </div>
-                </div>
-              </div>
+        <!-- Nivel de Alerta -->
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
+            🚨 NIVEL DE ALERTA
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🚨</div>
+              <p class="print:text-black font-bold">AVISO DE SEGURIDAD</p>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        UBICACIÓN
+      </h3>
+      <div class="print-map-container h-80 md:h-96">
+        <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        DESCRIPCIÓN
+      </h3>
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.description }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        RECOMENDACIONES PARA LA POBLACIÓN
+      </h3>
+      <div class="bg-red-50 dark:bg-red-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-red-200 dark:border-red-800 print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-red-800 dark:text-red-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.recommendations }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aviso de Tránsito -->
+  <div v-if="selectedManualReportType === 'traffic'">
+    
+    <!-- Información del Evento -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        INFORMACIÓN DEL EVENTO
+      </h3>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
+        <!-- Datos del Evento -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
+            📊 DATOS DEL EVENTO
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <p class="print:text-black"><strong>Tipo:</strong> {{ getTrafficAlertTitle() }}</p>
+            <p v-if="manualReport.traffic.duration" class="print:text-black">
+              <strong>Duración:</strong> {{ manualReport.traffic.duration }}
+            </p>
+            <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="print:text-black">
+              <strong>Coordenadas:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Nivel de Alerta -->
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
+            🚨 NIVEL DE ALERTA
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🚦</div>
+              <p class="print:text-black font-bold">AVISO DE TRÁNSITO</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        UBICACIÓN
+      </h3>
+      <div class="print-map-container h-80 md:h-96">
+        <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        DESCRIPCIÓN
+      </h3>
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.description }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        RECOMENDACIONES PARA LA POBLACIÓN
+      </h3>
+      <div class="bg-orange-50 dark:bg-orange-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-orange-200 dark:border-orange-800 print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-orange-800 dark:text-orange-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.recommendations }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interrupción de Servicio -->
+  <div v-if="selectedManualReportType === 'public_service'">
+    
+    <!-- Información del Evento -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        INFORMACIÓN DEL EVENTO
+      </h3>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
+        <!-- Datos del Evento -->
+        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
+            📊 DATOS DEL EVENTO
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <p class="print:text-black"><strong>Tipo:</strong> {{ getPublicServiceAlertTitle() }}</p>
+            <p v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="print:text-black">
+              <strong>Coordenadas:</strong> {{ manualReport.coordinates.lat.toFixed(6) }}, {{ manualReport.coordinates.lng.toFixed(6) }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Nivel de Alerta -->
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+          <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
+            🚨 NIVEL DE ALERTA
+          </h4>
+          <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
+            <div class="text-center">
+              <div class="text-4xl mb-2">🔧</div>
+              <p class="print:text-black font-bold">INTERRUPCIÓN DE SERVICIO</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ubicación -->
+    <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        UBICACIÓN
+      </h3>
+      <div class="print-map-container h-80 md:h-96">
+        <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
+      </div>
+    </div>
+
+    <!-- Descripción -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        DESCRIPCIÓN
+      </h3>
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.description }}
+        </p>
+      </div>
+    </div>
+
+    <!-- Recomendaciones -->
+    <div class="mb-8">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+        RECOMENDACIONES PARA LA POBLACIÓN
+      </h3>
+      <div class="bg-purple-50 dark:bg-purple-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-purple-200 dark:border-purple-800 print:border-0 print:ring-1 print:ring-gray-100">
+        <p class="text-purple-800 dark:text-purple-300 print:text-black text-[15px] print:text-[12px]">
+          {{ manualReport.recommendations }}
+        </p>
+      </div>
+    </div>
+  </div>
+ 
+</div>
+
 
             <!-- Reportes Automáticos -->
             <div v-if="reportCategory === 'automatic'">
@@ -2005,30 +2129,28 @@
     </div>
 
   </div>
-</div>
-
-
+</div> 
                 <!-- Detalle de Eventos -->
                 <div class="mb-8" v-if="events.length > 0">
-                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100">DETALLE DE EVENTOS</h3>
+                  <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">DETALLE DE EVENTOS</h3>
                   <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 text-sm">
-                      <thead class="bg-gray-100 dark:bg-gray-700 print:bg-white">
+                    <table class="w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 text-white print:text-black print:text-[10px]">
+                      <thead class="bg-gray-100 dark:bg-gray-700 print:bg-white"> 
                         <tr>
                           <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Código</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Hora</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Tipo</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Prioridad</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Ubicación</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Estado</th>
+                         <!-- <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Hora</th> -->
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Tipo</th>
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Prioridad</th>
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Ubicación</th>
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Estado</th>
                           <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">T.Resp</th>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Agente</th>
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Agente</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr v-for="event in events" :key="event.code" class="hover:bg-gray-50 dark:hover:bg-gray-600 print:hover:bg-white">
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 font-mono text-xs print:text-black">{{ event.code }}</td>
-                          <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.time }}</td>
+                       <!--  <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.time }}</td> -->
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ getEventTypeName(event.type) }}</td>
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.priority.toUpperCase() }}</td>
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-xs print:text-black">{{ getShortLocationText(event.location) }}</td>
@@ -2090,45 +2212,45 @@
   </h3>
 
   <!-- Lista de eventos -->
-  <div class="space-y-4">
+  <div class="space-y-4 print:space-y-2">
     <div
       v-for="event in getEventsByCommunityDetailed(community.id)"
       :key="event.code"
       class="bg-gray-50 dark:bg-gray-600 print:bg-white p-3 rounded-lg border-l-4 border-l-primary print:border-l-black 
-             flex flex-col lg:flex-row justify-between items-stretch gap-3"
+             flex flex-col lg:flex-row justify-between items-stretch gap-3 print:gap-2 print:p-2"
     >
       <!-- Información del evento -->
-      <div class="lg:w-[30%] w-full flex flex-col justify-between text-sm">
+      <div class="lg:w-[40%] w-full flex flex-col justify-between text-sm print:text-xs print:space-y-0">
         <div
-          class="flex flex-wrap items-center justify-between mb-2 border-b border-gray-200 dark:border-gray-500 pb-1"
+          class="flex flex-wrap items-center justify-between mb-2 print:mb-1 border-b border-gray-200 dark:border-gray-500 pb-1 print:pb-0.5"
         >
-          <div class="flex flex-wrap items-center gap-2">
+          <div class="flex flex-wrap items-center gap-2 print:gap-1">
             <span
-              class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 rounded print:text-black"
+              class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-black"
               >{{ event.code }}</span
             >
             <span
-              class="px-2 py-1 text-xs font-medium rounded print:text-black"
+              class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
               >{{ event.priority.toUpperCase() }}</span
             >
             <span
-              class="text-xs text-gray-600 dark:text-gray-400 print:text-black"
+              class="text-xs text-gray-600 dark:text-gray-400 print:text-black print:text-[0.65rem]"
               >{{ event.time }}</span
             >
           </div>
           <span
-            class="px-2 py-1 text-xs font-medium rounded print:text-black"
+            class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
             >{{ getStatusText(event.status) }}</span
           >
         </div>
 
         <p
-          class="font-medium text-gray-900 dark:text-white print:text-black mb-1"
+          class="font-medium text-gray-900 dark:text-white print:text-black mb-1 print:mb-0.5"
         >
           {{ getEventTypeName(event.type) }}
         </p>
-        <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1">
-          <strong>Barrio:</strong>
+        <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1 print:mb-0.5">
+          <strong>Ubicación:</strong>
           {{ event.location.neighborhood || 'No especificado' }}
           <span v-if="event.location.reference">
             - {{ event.location.reference }}
@@ -2136,12 +2258,12 @@
         </p>
 
         <!-- Instituciones y recursos por evento -->
-        <div v-if="getEventInstitutions(event).length > 0" class="mt-2">
+        <div v-if="getEventInstitutions(event).length > 0" class="mt-2 print:mt-1">
           <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
             <strong>Instituciones y Recursos:</strong>
           </p>
         
-          <div class="space-y-1">
+          <div class="space-y-1 print:space-y-0.5">
             <div 
               v-for="(institution, idx) in getEventInstitutions(event)" 
               :key="'inst-'+idx"
@@ -2150,30 +2272,30 @@
               <!-- Color dinámico según el índice -->
               <template v-if="idx % 4 === 0">
                 <span 
-                  class="text-xs px-2 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                 >
-                  {{ institution.name }} ({{ getInstitutionResourceCount(event, institution.id) }})
+                  {{ institution.name }}
                 </span>
               </template>
               <template v-else-if="idx % 4 === 1">
                 <span 
-                  class="text-xs px-2 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                 >
-                  {{ institution.name }} ({{ getInstitutionResourceCount(event, institution.id) }})
+                  {{ institution.name }}
                 </span>
               </template>
               <template v-else-if="idx % 4 === 2">
                 <span 
-                  class="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                 >
-                  {{ institution.name }} ({{ getInstitutionResourceCount(event, institution.id) }})
+                  {{ institution.name }}
                 </span>
               </template>
               <template v-else>
                 <span 
-                  class="text-xs px-2 py-1 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
+                  class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
                 >
-                  {{ institution.name }} ({{ getInstitutionResourceCount(event, institution.id) }})
+                  {{ institution.name }}
                 </span>
               </template>
         
@@ -2183,7 +2305,7 @@
     v-if="resource.fullId && resource.fullId.startsWith(institution.id + '_')"
     :key="'res-'+idx+'-'+rIdx"
     :class="[
-      'text-xs px-2 py-1 rounded-full',
+      'text-xs px-2 py-1 print:px-1 print:py-0 rounded-full',
       idx % 4 === 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
       idx % 4 === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
       idx % 4 === 2 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
@@ -2191,7 +2313,7 @@
     ]"
   >
     {{ resource.name }}
-    <span v-if="resource.specification" class="ml-1 text-gray-600 dark:text-gray-300 print:text-black">
+    <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-black">
       ({{ resource.specification }})
     </span>
   </span>
@@ -2203,7 +2325,7 @@
 
 
         <!-- Afectaciones -->
-        <div v-if="hasImpacts(event)" class="mt-2">
+        <div v-if="hasImpacts(event)" class="mt-2 print:mt-1">
           <p class="text-xs font-medium text-gray-600 dark:text-gray-400 print:text-black mb-1">
             <strong>Afectaciones:</strong>
           </p>
@@ -2222,16 +2344,16 @@
         </p>
       </div>
 
-      <!-- Mapa (70%) -->
+      <!-- Mapa (60%) -->
       <div
-        v-if="event.coordinates.lat && event.coordinates.lng"
-        class="lg:w-[70%] w-full flex justify-center items-center"
-      >
-        <div
-          :id="`event-mini-map-${event.code}`"
-          class="w-full h-56 sm:h-64 rounded-md border print:border print:ring-1 print:ring-gray-300"
-        ></div>
-      </div>
+  v-if="event.coordinates.lat && event.coordinates.lng"
+  class="lg:w-[60%] w-full flex justify-center items-center mini-map-container"
+>
+  <div
+    :id="`event-mini-map-${event.code}`"
+    class="mini-map w-full h-56 sm:h-64 rounded-md border print:border print:ring-1 print:ring-gray-300"
+  ></div>
+</div> 
     </div>
   </div>
 </div>
@@ -2245,20 +2367,20 @@
             
             <!-- Sección de imágenes globales (ANEXOS) -->
 <div v-if="uploadedImages && uploadedImages.length > 0" class="mb-0">
-  <h3 class="text-[10px] sm:text-sm font-semibold mb-2 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-1 print:border-0 print:ring-1 print:ring-gray-100">
+  <h3 class="text-[10px] sm:text-sm font-semibold mb-2 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-1 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
     ANEXOS
   </h3>
 
   <!-- Contenedor general para todas las imágenes -->
-  <div class="overflow-y-auto pb-0 mb-0">
+  <div class="overflow-y-auto pb-0 mb-12 print:mb-4">
     <div class="flex flex-wrap gap-3 justify-start items-start">
-      <div
+     <div
         v-for="(img, index) in uploadedImages"
         :key="'img-' + index"
-        class="relative group"
+        class="relative group print:break-inside-avoid"
       >
         <!-- Imagen cuadrada -->
-        <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-md overflow-hidden flex items-center justify-center">
+        <div class="w-24 h-24 sm:w-32 sm:h-32 lg:w-[14rem] lg:h-[14rem] rounded-md overflow-hidden flex items-center justify-center"> 
           <img 
             :src="img.preview" 
             class="w-full h-full object-cover transition-transform duration-200 group-hover:scale-105 rounded-md"
@@ -2275,31 +2397,31 @@
           ×
         </button>
       </div>
-    </div>
   </div>
+</div> 
 </div>
-
-<!-- Footer del Reporte -->
-<div class="text-center text-sm text-gray-500 dark:text-gray-400 print:text-black p-4 border-t border-gray-200 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 mt-0">
-  <div class="max-w-3xl mx-auto">
-    <div v-if="sources.length > 0" class="flex flex-col items-center space-y-1 mb-2">
-      <span class="font-medium text-gray-500 dark:text-gray-400 print:text-black">🌐 Fuentes:</span>
-      <div class="flex flex-wrap justify-center items-center gap-2">
-        <template v-for="(source, index) in sources" :key="source.id">
-          <a :href="source.url" target="_blank" rel="noopener noreferrer" 
-             class="text-blue-600 dark:text-blue-400 print:text-black hover:underline whitespace-nowrap">
-            {{ source.url }}
-          </a>
-          <span v-if="index < sources.length - 1" class="text-gray-400 dark:text-gray-500 print:text-black">|</span>
-        </template>
-      </div>
-    </div>
-    <p>Municipalidad de Roatán</p>
-    <p>📞 Emergencias: *1101</p>
-    <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p> 
-  </div>
-</div>
-
+ 
+    <!-- Footer del Reporte -->
+           <div class="text-center text-sm text-gray-500 dark:text-gray-400 p-6 border-t border-gray-200 dark:border-gray-600 mt-8">
+               <div class="max-w-3xl mx-auto">
+                   <div v-if="sources.length > 0" class="flex flex-col items-center space-y-2 mb-4">
+                       <span class="font-medium text-gray-500 dark:text-gray-400">🌐 Fuentes:</span>
+                       <div class="flex flex-wrap justify-center items-center gap-2">
+                           <template v-for="(source, index) in sources" :key="source.id">
+                               <a :href="source.url" target="_blank" rel="noopener noreferrer" 
+                                  class="text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap">
+                                   {{ source.url }}
+                               </a>
+                               <span v-if="index < sources.length - 1" class="text-gray-400 dark:text-gray-500">|</span>
+                           </template>
+                       </div>
+                   </div>
+                   <p>Municipalidad de Roatán</p>
+                   <p>📞 Emergencias: *1101</p>
+                   <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p> 
+                   <p>Documento generado el {{ getCurrentDateTime() }}</p>
+               </div>
+           </div>
            
           </div>
         </div>
@@ -2612,8 +2734,7 @@ export default {
     this.updateDateTime()
     setInterval(this.updateDateTime, 1000)
     this.resetDashboardDates()
-    this.updateDashboard()
-    this.generateSampleData()
+    this.updateDashboard() 
     this.initDarkMode()
     this.loadChartsLibraries()
   },
@@ -2861,34 +2982,7 @@ removeSource(index) {
       if (this.canInitiateTurn()) {
         this.showTurnCodeModal = true
       }
-    },
-    
-    generateSampleData() {
-      const sampleEvents = [
-        {
-          type: 'seguridad',
-          code: 'SEG-240120-1430-01',
-          priority: 'alta',
-          description: 'Robo a transeúnte reportado en zona comercial',
-          location: { community: 'coxenhole', neighborhood: 'Centro Histórico', reference: 'Cerca del banco principal' },
-          coordinates: { lat: 16.3291, lng: -86.5392 },
-          institutionsUsed: { policia: true },
-          resourcesUsed: { 'policia_patrullas': true, 'policia_agentes': true },
-          resourceSpecifications: { 'policia_patrullas': '2 unidades', 'policia_agentes': '4 efectivos' },
-          responseTimeEstimated: { policia: 5 },
-          impacts: { personas_afectadas: true },
-          impactDetails: { personas_afectadas: '1 persona' },
-          time: '14:30:00',
-          date: new Date().toISOString().split('T')[0],
-          registeredBy: 'AGT001',
-          actualResponseTime: 7,
-          shiftSupervisor: 'SUP001',
-          status: 'resuelto'
-        }
-      ]
-      
-      this.allEvents = [...sampleEvents]
-    },
+    }, 
     
     // Shift Management
     startTurn() {
@@ -3636,6 +3730,15 @@ removeSource(index) {
       return this.events.filter(event => event.institutionsUsed && event.institutionsUsed[institutionId]).length
     },
 
+    getInstitutionResourceCount(event, institutionId) {
+      if (!event || !event.resourcesUsed) return 0;
+      
+      // Contar recursos que pertenecen a esta institución
+      return Object.keys(event.resourcesUsed)
+        .filter(resourceId => resourceId.startsWith(institutionId + '_') && event.resourcesUsed[resourceId])
+        .length;
+    },
+
     getAvgResponseTimeByInstitution(institutionId) {
       const instEvents = this.events.filter(event => 
         event.institutionsUsed && 
@@ -3908,11 +4011,153 @@ removeSource(index) {
 }
 
 @media print {
+  @media print {
+  /* Evitar que el contenedor se corte o tenga scroll */
+  .overflow-y-auto {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  /* Mantener el layout tipo cuadrícula */
+  .flex-wrap {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.75rem !important; /* igual a gap-3 */
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+  }
+
+  /* Evitar que los elementos se corten entre páginas */
+  .flex-wrap > div {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  /* Mantener el mismo tamaño cuadrado */
+  .w-24,
+  .h-24,
+  .sm\:w-32,
+  .sm\:h-32,
+  .print\:w-24,
+  .print\:h-24 {
+    width: 14rem !important;   
+    height: 14rem !important;  
+  }
+
+  /* Forzar proporción cuadrada y buena calidad */
+  .flex-wrap img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Ocultar el botón eliminar */
+  button[title="Eliminar imagen"] {
+    display: none !important;
+  }
+
+  /* Ajustar márgenes */
+  .overflow-y-auto.pb-0.mb-0 {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+  .mini-map-container {
+    display: block !important;   /* evita el comportamiento del flex */
+    height: 12rem !important;    /* igual a h-64 → 256px */
+    overflow: hidden;
+  }
+
+  .mini-map {
+    height: 100% !important;
+    aspect-ratio: auto !important;
+  }
   .seccion-datos > div {
     padding-left: 3mm !important; 
     padding-top: 4mm !important;
     padding-bottom: 4mm !important;
-  } 
+  }
+  
+  /* Asegurar que la estructura de eventos mantenga el diseño en modo impresión */
+  .space-y-4 > div {
+    page-break-inside: avoid;
+  }
+  
+  /* Mantener el diseño de fila para eventos en impresión */
+  .flex-col.lg\:flex-row {
+    display: flex !important;
+    flex-direction: row !important;
+  }
+  
+  /* Mantener los anchos correctos para la información y el mapa */
+  .lg\:w-\[40\%\] {
+    width: 40% !important;
+  }
+  
+  .lg\:w-\[60\%\] {
+    width: 60% !important;
+  }
+  
+  /* Reducir espaciado en la información del evento */
+  .print\:space-y-0 > * + * {
+    margin-top: 0 !important;
+  }
+  
+  /* Ajustar tamaños de texto para impresión */
+  .print\:text-xs {
+    font-size: 0.7rem !important;
+    line-height: 1.1 !important;
+  }
+  
+  /* Reducir espaciado vertical entre elementos */
+  .space-y-4 > div {
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Reducir espaciado en la vista de impresión */
+  @media print {
+    .space-y-4 {
+      margin-top: 0.25rem !important;
+    }
+    
+    .space-y-4 > div {
+      margin-bottom: 0.25rem !important;
+    }
+    
+    .px-2.py-1 {
+      padding: 1px 2px !important;
+    }
+    
+    .rounded-full {
+      padding: 0px 2px !important;
+      font-size: 0.65rem !important;
+    }
+    
+    .text-xs {
+      font-size: 0.65rem !important;
+      line-height: 1 !important;
+    }
+    
+    .mb-1 {
+      margin-bottom: 0.1rem !important;
+    }
+  }
+  
+  /* Reducir padding en elementos internos */
+  .px-2.py-1.print\:text-black {
+    padding: 1px 2px !important;
+  }
+  
+  /* Asegurar que los mapas de eventos sean visibles */
+  [id^="event-mini-map-"] {
+    display: block !important;
+    visibility: visible !important;
+    height: 108px !important; /* Reducido en un 40% de 180px */
+    width: 100% !important;
+    border: 1px solid #000 !important;
+  }
+  
   
   /* Forzar a los navegadores a imprimir los fondos */
   * {
@@ -3922,42 +4167,42 @@ removeSource(index) {
   }
   
   /* Eliminar encabezados y pies de página del navegador y evitar contenido en esquinas */
+  /* Configuración de página - CRÍTICO PARA FOOTERS */
   @page {
     size: A4;
-    margin: 0.8cm;
+    margin: 1cm 1cm 1cm 1cm; /* Margen inferior de 4cm para el footer fijo */
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
     marks: none;
-    /* Eliminar cualquier contenido automático en esquinas */
-    @top-left { content: none !important; }
-    @top-center { content: none !important; }
-    @top-right { content: none !important; }
-    @bottom-left { content: none !important; }
-    @bottom-center { content: none !important; }
-    @bottom-right { content: none !important; }
-    @top-left-corner { content: none !important; }
-    @top-right-corner { content: none !important; }
-    @bottom-left-corner { content: none !important; }
-    @bottom-right-corner { content: none !important; }
   }
   
   /* Eliminar headers y footers automáticos */
   @page :first { 
-    margin: 0.8cm; 
-    @top-left { content: none !important; }
-    @top-right { content: none !important; }
-    @bottom-left { content: none !important; }
-    @bottom-right { content: none !important; }
+    margin: 1cm 1cm 1cm 1cm;
   }
   @page :left { 
-    margin: 0.8cm; 
-    @top-left { content: none !important; }
-    @bottom-left { content: none !important; }
+    margin: 1cm 1cm 1cm 1cm;
   }
   @page :right { 
-    margin: 0.8cm; 
-    @top-right { content: none !important; }
-    @bottom-right { content: none !important; }
+    margin: 1cm 1cm 1cm 1cm;
+  }
+  
+  /* Estilos para el footer de impresión */
+  .dashboard-print-footer {
+    display: block !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding: 10px 1.5cm !important;
+    border-top: 2px solid #3b82f6 !important;
+    background-color: #eff6ff !important;
+    z-index: 9999 !important;
+    page-break-inside: avoid !important;
+    text-align: center !important;
+    font-size: 0.9em !important;
+    color: #1e40af !important;
   }
   
   body, html { 
@@ -4055,24 +4300,25 @@ removeSource(index) {
   
   .dashboard-print-header img {
     margin-right: 10px;
-  }
-  
-  .dashboard-print-footer {
+  } 
+   
+  .print-footer {
     display: block !important;
+    position: fixed !important;
     margin: 20px 0 0 0 !important;
     padding: 10px 0 0 0 !important;
-    border-top: 1px solid #eee;
-    page-break-before: avoid;
-  }
-  
-  .print-header-start,
-  .print-footer-end {
-    text-align: center;
-    font-weight: bold;
-    font-size: 14px;
-    color: #000 !important;
-    margin: 10px 0;
-    letter-spacing: 1px;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding: 10px 1.5cm !important;
+    border-top: 2px solid #3b82f6 !important;
+    background-color: #eff6ff !important;
+    z-index: 9999 !important;
+    page-break-inside: avoid !important;
+    text-align: center !important;
+    font-size: 0.9em !important;
+    color: #1e40af !important;
   }
   
   /* Asegurar que los contenedores no tengan márgenes ni padding */
@@ -4474,5 +4720,80 @@ textarea {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: #9ca3af;
 }
+/* Eliminar encabezados y pies de página del navegador y evitar contenido en esquinas */
+  @page {
+    size: A4;
+    margin: 0.8cm;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    marks: none;
+    /* Eliminar cualquier contenido automático en esquinas */
+    @top-left { content: none !important; }
+    @top-center { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-center { content: none !important; }
+    @bottom-right { content: none !important; }
+    @top-left-corner { content: none !important; }
+    @top-right-corner { content: none !important; }
+    @bottom-left-corner { content: none !important; }
+    @bottom-right-corner { content: none !important; }
+  }
+  
+  /* Eliminar headers y footers automáticos */
+  @page :first { 
+    margin: 0.8cm; 
+    @top-left { content: none !important; }
+    @top-right { content: none !important; }
+    @bottom-left { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+  @page :left { 
+    margin: 0.8cm; 
+    @top-left { content: none !important; }
+    @bottom-left { content: none !important; }
+  }
+  @page :right { 
+    margin: 0.8cm; 
+    @top-right { content: none !important; }
+    @bottom-right { content: none !important; }
+  }
+  
+  body, html { 
+    -webkit-print-color-adjust: exact; 
+    print-color-adjust: exact;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+    width: 100% !important;
+    height: 100% !important;
+    font-size: 12pt;
+    line-height: 1.2;
+    
+    /* Ocultar encabezados y pies de página en Chrome/Edge */
+    -webkit-print-header-footer: false;
+    print-header-footer: false;
+  }
+  
+  /* Ocultar encabezados y pies de página en Firefox */
+  @page :footer { display: none !important; content: none !important; }
+  @page :header { display: none !important; content: none !important; }
+  
+  /* Ocultar cualquier elemento que pueda estar en las esquinas */
+  body::before,
+  body::after,
+  html::before,
+  html::after,
+  #app::before,
+  #app::after,
+  .page-marker,
+  .corner,
+  .watermark,
+  .page-break,
+  .print-corner {
+    display: none !important;
+    content: none !important;
+    visibility: hidden !important;
+  }
 </style>
  
