@@ -8,11 +8,11 @@ export default defineNuxtConfig({
    
   app: {
     head: {
-      title: 'Titulo',
+      title: 'Centro de Monitoreo Avanzado',
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, user-scalable=no' },
-        { name: 'description', content: 'Servicios técnicos profesionales a domicilio. Fontanería, electricidad, aires acondicionados y más.' },
+        { name: 'description', content: 'Centro de Monitoreo Avanzado' },
         { name: 'theme-color', content: '#2563eb' },
         { name: 'mobile-web-app-capable', content: 'yes' },
         { name: 'apple-mobile-web-app-capable', content: 'yes' },
@@ -37,9 +37,9 @@ export default defineNuxtConfig({
   // Runtime config
   runtimeConfig: {
     public: {
-      appName: 'Titulo',
+      appName: 'Centro de Monitoreo Avanzado',
       appVersion: '1.0.0',
-      apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000' //process.env.NUXT_PUBLIC_API_URL ||  
+      apiBase: process.env.NUXT_PUBLIC_API_URL //|| 'http://localhost:4000' //process.env.NUXT_PUBLIC_API_URL ||  
     }
   }
 })
