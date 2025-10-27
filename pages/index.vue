@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+    
     <!-- Header del Dashboard para Impresión (solo para dashboard) -->
     <div v-if="activeTab === 'dashboard'" class="dashboard-print-header print:block hidden" style="display: none;">
       <div class="flex items-center justify-center text-center relative print:items-start">
@@ -29,9 +30,9 @@
         <div class="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-3 sm:py-0">
           <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-0">
             <div class="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
-              <svg class="w-5 h-5 sm:w-7 sm:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
-              </svg>
+              <img src="./Escudo_de_Roatan.png" 
+                     alt="Escudo de Roatan" 
+                     class="h-10 w-auto sm:h-12 md:h-14 print:h-10 print:w-10">
             </div>
             <div class="text-center sm:text-left">
               <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white">Centro de Monitoreo Avanzado</h1>
@@ -39,21 +40,27 @@
             </div>
           </div>
 
-          <div class="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+          <div class="hidden sm:flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
             <div class="text-center sm:text-right">
               <p class="text-xs sm:text-sm font-medium text-gray-900 dark:text-white">{{ currentDateTime }}</p>
               <p v-if="activeShift" class="text-xs text-green-600 dark:text-green-400 flex items-center justify-center sm:justify-end">
                 <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
                 Turno Activo - {{ activeShift.supervisor }}
               </p>
-              <p v-else class="text-xs text-red-600 dark:text-red-400 flex items-center justify-center sm:justify-end">
+              <p v-else class="text-xs text-red-600 dark:text-red-400 items-center justify-center sm:justify-end hidden sm:flex">
                 <span class="w-2 h-2 bg-red-500 rounded-full mr-1"></span>
                 Sin turno activo
               </p>
             </div>
-            <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 rounded-lg px-2 sm:px-3 py-1 sm:py-2">
-              <div class="camera-status camera-online" title="Cámaras Online"></div>
-              <span class="text-xs text-gray-600 dark:text-gray-400 font-medium">{{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</span>
+          </div>
+          <!-- Versión móvil que solo muestra cuando hay turno activo -->
+          <div v-if="activeShift" class="sm:hidden flex flex-col items-center space-y-2">
+            <div class="text-center">
+              <p class="text-xs font-medium text-gray-900 dark:text-white">{{ currentDateTime }}</p>
+              <p class="text-xs text-green-600 dark:text-green-400 flex items-center justify-center">
+                <span class="w-2 h-2 bg-green-500 rounded-full mr-1 animate-pulse"></span>
+                Turno Activo - {{ activeShift.supervisor }}
+              </p>
             </div>
           </div>
         </div>
@@ -243,7 +250,7 @@
           <button v-for="tab in tabs" :key="tab.id"
                   @click="setActiveTab(tab.id)"
                   :class="[
-                    'flex-1 min-w-0 py-2 px-2 sm:px-4 rounded-lg font-medium text-xs sm:text-sm transition-all duration-300',
+                    'flex-1 min-w-0 py-2 px-2 sm:px-4 rounded-lg font-medium text-[10px] sm:text-sm transition-all duration-300',
                     activeTab === tab.id
                       ? 'bg-white dark:bg-gray-700 text-primary shadow-md transform scale-105'
                       : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:text-gray-300 dark:hover:bg-gray-700'
@@ -316,100 +323,127 @@
         <div id="dashboard-content"> 
            
          <div class="grid grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 print:grid-cols-2 print:gap-4 print:mb-4 print:max-w-2xl print:mx-auto">
-  <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 rounded-xl shadow-lg p-4 sm:p-6 border border-blue-200 dark:border-blue-700 print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none print:rounded">
-    <div class="flex flex-col items-center">
-                 <p class="text-sm font-medium text-blue-600 dark:text-blue-300 print:text-gray-700 mb-2">Eventos en Rango</p>
-                 <div class="flex items-center justify-center">
-                   <p class="text-2xl sm:text-3xl font-bold text-blue-900 dark:text-blue-100 print:text-black">{{ getFilteredEvents().length }}</p>
-                   <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-full flex items-center justify-center print:bg-gray-200 ml-2 print:scale-90">
-                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white print:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                       <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                     </svg>
-                   </div>
-                 </div>
-               </div>
-             </div>
+          
+           <div class="bg-blue-50 dark:bg-blue-800 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="flex flex-col items-center text-center">
+    <p class="text-sm font-medium text-blue-600 dark:text-white print:text-black mb-2 w-full">Eventos en Rango</p>
+    <div class="flex items-center justify-center">
+      <p class="text-2xl sm:text-3xl font-bold text-blue-900 dark:text-blue-100 print:text-black">{{ getFilteredEvents().length }}</p>
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500 rounded-full flex items-center justify-center ml-2 print:hidden">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white print:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
            
-             <div class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl shadow-lg p-4 sm:p-6 border border-green-200 dark:border-green-700 print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none print:rounded">
-               <div class="flex flex-col items-center">
-                 <p class="text-sm font-medium text-green-600 dark:text-green-300 print:text-gray-700 mb-2">Cámaras Activas</p>
-                 <div class="flex items-center justify-center">
-                   <p class="text-2xl sm:text-3xl font-bold text-green-900 dark:text-green-100 print:text-black">{{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
-                   <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-full flex items-center justify-center print:bg-gray-200 ml-2 print:scale-90">
-                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white print:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                       <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
-                     </svg>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           
-             <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900 dark:to-yellow-800 rounded-xl shadow-lg p-4 sm:p-6 border border-yellow-200 dark:border-yellow-700 print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none print:rounded">
-               <div class="flex flex-col items-center">
-                 <p class="text-sm font-medium text-yellow-600 dark:text-yellow-300 print:text-gray-700 mb-2">Recursos Desplegados</p>
-                 <div class="flex items-center justify-center">
-                   <p class="text-2xl sm:text-3xl font-bold text-yellow-900 dark:text-yellow-100 print:text-black">{{ getTotalResourcesDeployedFiltered() }}</p>
-                   <div class="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-500 rounded-full flex items-center justify-center print:bg-gray-200 ml-2 print:scale-90">
-                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white print:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                       <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
-                     </svg>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           
-             <div class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800 rounded-xl shadow-lg p-4 sm:p-6 border border-purple-200 dark:border-purple-700 print:bg-white print:border-0 print:ring-1 print:ring-gray-100 print:shadow-none print:rounded">
-               <div class="flex flex-col items-center">
-                 <p class="text-sm font-medium text-purple-600 dark:text-purple-300 print:text-gray-700 mb-2">Tiempo Resp. Prom</p>
-                 <div class="flex items-center justify-center">
-                   <p class="text-2xl sm:text-3xl font-bold text-purple-900 dark:text-purple-100 print:text-black">{{ getAverageResponseTimeFiltered() }} min</p>
-                   <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-full flex items-center justify-center print:bg-gray-200 ml-2 print:scale-90">
-                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white print:text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                       <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
-                     </svg>
-                   </div>
-                 </div>
-               </div>
-             </div>
-           </div>
+<!-- Cámaras Activas -->
+<div class="bg-green-50 dark:bg-green-800 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="flex flex-col items-center text-center">
+    <p class="text-sm font-medium text-green-600 dark:text-white print:text-black mb-2 w-full">Cámaras Activas</p>
+    <div class="flex items-center justify-center">
+      <p class="text-2xl sm:text-3xl font-bold text-green-900 dark:text-green-100 print:text-black">{{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-500 rounded-full flex items-center justify-center ml-2 print:hidden">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
 
-          <!-- Additional Stats -->
+<!-- Recursos Desplegados -->
+<div class="bg-yellow-50 dark:bg-yellow-800 print:bg-yellow-50 print:dark:bg-yellow-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="flex flex-col items-center text-center">
+    <p class="text-sm font-medium text-yellow-600 dark:text-white print:text-black mb-2 w-full">Recursos Desplegados</p>
+    <div class="flex items-center justify-center">
+      <p class="text-2xl sm:text-3xl font-bold text-yellow-900 dark:text-yellow-100 print:text-black">{{ getTotalResourcesDeployedFiltered() }}</p>
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-500 rounded-full flex items-center justify-center ml-2 print:hidden">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Tiempo Resp. Prom -->
+<div class="bg-purple-50 dark:bg-purple-800 print:bg-purple-50 print:dark:bg-purple-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="flex flex-col items-center text-center">
+    <p class="text-sm font-medium text-purple-600 dark:text-white print:text-black mb-2 w-full">Tiempo Resp. Prom</p>
+    <div class="flex items-center justify-center">
+      <p class="text-2xl sm:text-3xl font-bold text-purple-900 dark:text-purple-100 print:text-black">{{ getAverageResponseTimeFiltered() }} min</p>
+      <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500 rounded-full flex items-center justify-center ml-2 print:hidden">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Additional Stats - Resumen por Prioridad (SOLO, A LO ANCHO) -->
 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-2 sm:p-6 border border-gray-200 dark:border-gray-700 mb-6 sm:mb-10 print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
   <h3 class="text-sm sm:text-lg font-semibold text-gray-900 dark:text-white print:text-black mb-3 sm:mb-6 flex items-center justify-center sm:justify-start">
     <span class="w-4 h-4 sm:w-8 sm:h-8 bg-red-100 dark:bg-red-900 rounded-lg flex items-center justify-center mr-2 sm:mr-3 print:bg-gray-300">📋</span>
     <span>Resumen por Prioridad</span>
-  </h3>
-
+  </h3> 
   <!-- Grid de 4 columnas incluso en móvil -->
   <div class="grid grid-cols-4 gap-1 sm:gap-4 text-center">
     
     <!-- Críticos -->
-    <div class="p-2 sm:p-4 bg-gradient-to-br from-red-50 to-red-100 dark:from-red-900 dark:to-red-800 rounded-xl border border-red-200 dark:border-red-700 flex flex-col items-center justify-center print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-base sm:text-4xl font-bold text-red-600 dark:text-red-400 print:text-black">{{ getEventsByPriorityFiltered('critica') }}</div>
-      <div class="text-[8px] sm:text-sm text-red-600 dark:text-red-400 print:text-black mt-1 sm:mt-2 font-medium">🔴 Críticos</div>
-    </div>
-
-    <!-- Altos -->
-    <div class="p-2 sm:p-4 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800 rounded-xl border border-orange-200 dark:border-orange-700 flex flex-col items-center justify-center print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-base sm:text-4xl font-bold text-orange-600 dark:text-orange-400 print:text-black">{{ getEventsByPriorityFiltered('alta') }}</div>
-      <div class="text-[8px] sm:text-sm text-orange-600 dark:text-orange-400 print:text-black mt-1 sm:mt-2 font-medium">🟠 Altos</div>
-    </div>
-
-    <!-- Medios -->
-    <div class="p-2 sm:p-4 bg-gradient-to-br from-yellow-50 to-yellow-100 dark:from-yellow-900 dark:to-yellow-800 rounded-xl border border-yellow-200 dark:border-yellow-700 flex flex-col items-center justify-center print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-base sm:text-4xl font-bold text-yellow-600 dark:text-yellow-400 print:text-black">{{ getEventsByPriorityFiltered('media') }}</div>
-      <div class="text-[8px] sm:text-sm text-yellow-600 dark:text-yellow-400 print:text-black mt-1 sm:mt-2 font-medium">🟡 Medios</div>
-    </div>
-
-    <!-- Bajos -->
-    <div class="p-2 sm:p-4 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900 dark:to-green-800 rounded-xl border border-green-200 dark:border-green-700 flex flex-col items-center justify-center print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
-      <div class="text-base sm:text-4xl font-bold text-green-600 dark:text-green-400 print:text-black">{{ getEventsByPriorityFiltered('baja') }}</div>
-      <div class="text-[8px] sm:text-sm text-green-600 dark:text-green-400 print:text-black mt-1 sm:mt-2 font-medium">🟢 Bajos</div>
-    </div>
-
+<div class="p-1 sm:p-4 bg-red-50 dark:bg-red-800 rounded-xl border border-red-200 dark:border-red-700 
+            flex flex-col items-center justify-center 
+            print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="text-[14px] sm:text-4xl font-bold text-red-600 dark:text-white print:text-black">
+    {{ getEventsByPriorityFiltered('critica') }}
+  </div>
+  <div class="text-[6px] sm:text-sm text-red-600 dark:text-white print:text-black mt-1 sm:mt-2 font-medium">
+    🔴 Críticos
   </div>
 </div>
 
+<!-- Altos -->
+<div class="p-1 sm:p-4 bg-orange-50 dark:bg-orange-800 rounded-xl border border-orange-200 dark:border-orange-700 
+            flex flex-col items-center justify-center 
+            print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="text-[14px] sm:text-4xl font-bold text-orange-600 dark:text-white print:text-black">
+    {{ getEventsByPriorityFiltered('alta') }}
+  </div>
+  <div class="text-[6px] sm:text-sm text-orange-600 dark:text-white print:text-black mt-1 sm:mt-2 font-medium">
+    🟠 Altos
+  </div>
+</div>
+
+<!-- Medios -->
+<div class="p-1 sm:p-4 bg-yellow-50 dark:bg-yellow-800 rounded-xl border border-yellow-200 dark:border-yellow-700 
+            flex flex-col items-center justify-center 
+            print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="text-[14px] sm:text-4xl font-bold text-yellow-600 dark:text-white print:text-black">
+    {{ getEventsByPriorityFiltered('media') }}
+  </div>
+  <div class="text-[6px] sm:text-sm text-yellow-600 dark:text-white print:text-black mt-1 sm:mt-2 font-medium">
+    🟡 Medios
+  </div>
+</div>
+
+<!-- Bajos -->
+<div class="p-1 sm:p-4 bg-green-50 dark:bg-green-800 rounded-xl border border-green-200 dark:border-green-700 
+            flex flex-col items-center justify-center 
+            print:bg-white print:border-0 print:ring-1 print:ring-gray-100">
+  <div class="text-[14px] sm:text-4xl font-bold text-green-600 dark:text-white print:text-black">
+    {{ getEventsByPriorityFiltered('baja') }}
+  </div>
+  <div class="text-[6px] sm:text-sm text-green-600 dark:text-white print:text-black mt-1 sm:mt-2 font-medium">
+    🟢 Bajos
+  </div>
+</div>
+
+
+  </div>
+</div>
           
           <!-- Charts Row 1 -->
           <div class="grid grid-cols-1 xl:grid-cols-2 print:grid-cols-2 gap-4 sm:gap-6 mb-6">
@@ -1352,23 +1386,15 @@
                       </select>
                     </div>
 
-                    <div>
-                      <div v-if="['impacto'].includes(manualReport.weather.probability)" class="lg:border-l lg:pl-6 lg:border-gray-200 dark:lg:border-gray-700">
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          {{ manualReport.weather.probability === 'impacto' ? 'Duración Estimada' : 'Duración Estimada' }}
-                          <span v-if="manualReport.weather.probability === 'impacto'" class="text-red-500">*</span>
-                        </label>
+                    <div v-if="manualReport.weather.probability === 'impacto'">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Duración Estimada
+                        <span class="text-red-500">*</span>
+                      </label>
                       <input v-model="manualReport.weather.duration" type="text"
-                            :placeholder="manualReport.weather.probability === 'impacto' ? 'Ej: 2 horas' : 'Ej: 2-4 horas'"
-                            :disabled="manualReport.weather.probability !== 'impacto'"
-                            :class="[
-                              'w-full px-3 py-2 text-base border rounded-lg focus:ring-2 focus:ring-primary focus:border-primary',
-                              manualReport.weather.probability === 'impacto' 
-                                ? 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white' 
-                                : 'border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                            ]">
-                    </div> 
-                    </div>  
+                            placeholder="Ej: 2 horas"
+                            class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
 
                   </div>
                 </div>
@@ -1665,19 +1691,19 @@
                 print:relative print:right-auto print:w-auto print:flex-shrink-0">
 
                 <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
-                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
                 </template>
 
                 <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
-                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
                 </template>
 
                 <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
-                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
                 </template>
 
                 <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
-                  <div class="text-4xl sm:text-5xl print:text-5xl">⚠️</div>
+                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
                 </template>
               </div>
             </div>
@@ -1695,81 +1721,91 @@
             <div v-if="selectedManualReportType === 'weather'"> 
     
             <!-- Información del Evento -->
-            <div class="mb-8">
+            <div class="mt-2 mb-2">
               <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
                 INFORMACIÓN DEL EVENTO
               </h3>
-      
-              <!-- Contenedor wrapper con Flexbox -->
-              <div class="flex flex-col sm:flex-row gap-4 seccion-datos">
-                <!-- Datos del Evento -->
-                <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1">
-                  <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-blue-800 mb-3">
-                    📊 DATOS DEL EVENTO
-                  </h4>
-                  <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-                    <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
-                    <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
-                      <strong>Zona:</strong> {{ getAffectedZoneText() }}
-                    </p>
-                    <p v-if="manualReport.weather.duration" class="print:text-black">
-                      <strong>Duración:</strong> {{ manualReport.weather.duration }}
-                    </p>
-                    <p v-if="manualReport.weather.probability" class="print:text-black">
-                      <strong>Probabilidad:</strong>
-                      {{ manualReport.weather.probability === 'baja' ? 'Baja (≤30%)' : 
-           manualReport.weather.probability === 'media' ? 'Media (31-70%)' : 
-           'Alta (>70%)' }}
-                    </p>
-                    <p v-if="manualReport.weather.rainfall" class="print:text-black">
-                      <strong>Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
-                    </p>
-                    <p v-if="manualReport.weather.intensity" class="print:text-black">
-                      <strong>Intensidad:</strong> {{ manualReport.weather.intensity }}
-                    </p>
-                    <p v-if="manualReport.weather.impactTime" class="print:text-black">
-                      <strong>Impacto:</strong> {{ manualReport.weather.impactTime }}
-                    </p>
-                  </div>
-                </div>
+       
+              <!-- 📘 Sección: Datos del Evento y Nivel de Alerta -->
+<div class="flex flex-row gap-2 sm:gap-4 seccion-datos">
 
-                <!-- Nivel de Alerta -->
-                <div
-                  :class="[
-                    'p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1',
-                    manualReport.weather.riskLevel === 'blanco' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
-                    manualReport.weather.riskLevel === 'verde' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
-                    manualReport.weather.riskLevel === 'amarillo' ? 'bg-yellow-50 dark:bg-yellow-900/20 print:bg-yellow-50 print:dark:bg-yellow-50 text-yellow-900 dark:text-yellow-200 print:text-black' :
-                    manualReport.weather.riskLevel === 'rojo' ? 'bg-red-50 dark:bg-red-900/20 print:bg-red-50 print:dark:bg-red-50 text-red-900 dark:text-red-200 print:text-black' : ''
-                  ]">         
-                  <h4 class="font-bold text-dark-900 dark:text-dark-200 print:text-black mb-3">
-                    🚨 NIVEL DE ALERTA
-                  </h4>
-                  <div class="space-y-1 text-white text-[14px] print:text-[14px] print:space-y-2">
-                    <div class="text-center">
-                      <div class="text-4xl mb-2">{{ getRiskIcon() }}</div>
-                      <p 
-                        :class="[
-                          'font-bold',
-                          manualReport.weather.riskLevel === 'blanco' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
-                          manualReport.weather.riskLevel === 'verde' ? 'text-green-900 dark:text-green-200 print:text-green-900' :
-                          manualReport.weather.riskLevel === 'amarillo' ? 'text-yellow-900 dark:text-yellow-200 print:text-yellow-900' :
-                          manualReport.weather.riskLevel === 'rojo' ? 'text-red-900 dark:text-red-200 print:text-red-900' : ''
-                        ]"
-                      >
-                        {{ getRiskLevelText() }}
-                      </p>
-                    </div> 
-                  </div>
-                </div>
-              </div>
+  <!-- 🟦 Datos del Evento -->
+  <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 
+              p-2 sm:p-4 md:p-6 rounded-lg 
+              print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1 min-w-[200px]">
+
+    <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black 
+               mb-2 sm:mb-3 text-xs sm:text-sm md:text-base print:text-[12px]">
+      📊 DATOS DEL EVENTO
+    </h4>
+
+    <div class="space-y-1 text-black text-xs sm:text-sm md:text-base print:text-[12px] print:space-y-2">
+      <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
+      <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
+        <strong>Zona:</strong> {{ getAffectedZoneText() }}
+      </p>
+      <p v-if="manualReport.weather.duration" class="print:text-black">
+        <strong>Duración:</strong> {{ manualReport.weather.duration }}
+      </p>
+      <p v-if="manualReport.weather.probability" class="print:text-black">
+        <strong>Probabilidad:</strong>
+        {{ manualReport.weather.probability === 'baja' ? 'Baja (≤30%)' : 
+          manualReport.weather.probability === 'media' ? 'Media (31-70%)' : 
+          'Alta (>70%)' }}
+      </p>
+      <p v-if="manualReport.weather.rainfall" class="print:text-black">
+        <strong>Precipitación:</strong> {{ manualReport.weather.rainfall }} mm
+      </p>
+      <p v-if="manualReport.weather.intensity" class="print:text-black">
+        <strong>Intensidad:</strong> {{ manualReport.weather.intensity }}
+      </p>
+      <p v-if="manualReport.weather.impactTime" class="print:text-black">
+        <strong>Impacto:</strong> {{ manualReport.weather.impactTime }}
+      </p>
+    </div>
+  </div>
+
+  <!-- 🚨 Nivel de Alerta -->
+  <div
+    :class="[
+      'p-2 sm:p-4 md:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100 flex-1 min-w-[150px]',
+      manualReport.weather.riskLevel === 'blanco' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+      manualReport.weather.riskLevel === 'verde' ? 'bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 text-green-900 dark:text-green-200 print:text-black' :
+      manualReport.weather.riskLevel === 'amarillo' ? 'bg-yellow-50 dark:bg-yellow-900/20 print:bg-yellow-50 print:dark:bg-yellow-50 text-yellow-900 dark:text-yellow-200 print:text-black' :
+      manualReport.weather.riskLevel === 'rojo' ? 'bg-red-50 dark:bg-red-900/20 print:bg-red-50 print:dark:bg-red-50 text-red-900 dark:text-red-200 print:text-black' : ''
+    ]">         
+
+    <h4 class="font-bold text-dark-900 dark:text-dark-200 print:text-black 
+               mb-2 sm:mb-3 text-xs sm:text-sm md:text-base print:text-[12px]">
+      🚨 NIVEL DE ALERTA
+    </h4>
+
+    <div class="text-center space-y-1 text-white text-xs sm:text-sm md:text-base print:text-[12px]">
+      <div class="text-3xl sm:text-4xl md:text-5xl mb-1 sm:mb-2 print:text-[24px]">
+        {{ getRiskIcon() }}
+      </div>
+      <p 
+        :class="[
+          'font-bold',
+          manualReport.weather.riskLevel === 'blanco' ? 'text-green-900 dark:text-green-200 print:text-black print:text-[12px]' :
+          manualReport.weather.riskLevel === 'verde' ? 'text-green-900 dark:text-green-200 print:text-black print:text-[12px]' :
+          manualReport.weather.riskLevel === 'amarillo' ? 'text-yellow-900 dark:text-yellow-200 print:text-black print:text-[12px]' :
+          manualReport.weather.riskLevel === 'rojo' ? 'text-red-900 dark:text-red-200 print:text-black print:text-[12px]' : ''
+        ]"
+      >
+        {{ getRiskLevelText() }}
+      </p>
+    </div>
+  </div>
+</div>
+
             </div>
 
           </div>
 
         <!-- Ubicación del Evento -->
         <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
             UBICACIÓN
           </h3>
           <div class="h-80 md:h-96 print-map-container">
@@ -1779,10 +1815,10 @@
 
         <!-- Descripción -->
         <div class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
             DESCRIPCIÓN
           </h3>
-          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
             <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.description }}
             </p>
@@ -1791,10 +1827,10 @@
 
        <!-- Recomendaciones -->
         <div class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
             RECOMENDACIONES PARA LA POBLACIÓN
           </h3>
-          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:ring-1 print:ring-gray-300">
+          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
             <p class="text-blue-800 dark:text-blue-300 print:text-black text-[15px] print:text-[12px]">
             {{ manualReport.recommendations }}
             </p>
@@ -1805,13 +1841,13 @@
         <div v-if="selectedManualReportType === 'security'"> 
           <!-- Información del Evento -->
           <div class="mb-8">
-            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black">
               INFORMACIÓN DEL EVENTO
             </h3>
       
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
               <!-- Datos del Evento -->
-              <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+              <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg">
                 <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
                   📊 DATOS DEL EVENTO
                 </h4>
@@ -1824,7 +1860,7 @@
         </div>
 
         <!-- Nivel de Alerta -->
-        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg">
           <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
             🚨 NIVEL DE ALERTA
           </h4>
@@ -1840,7 +1876,7 @@
 
      <!-- Ubicación -->
      <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
@@ -1850,10 +1886,10 @@
 
      <!-- Descripción -->
      <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         DESCRIPCIÓN
       </h3>
-      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
         <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.description }}
         </p>
@@ -1862,10 +1898,10 @@
 
      <!-- Recomendaciones -->
      <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
-      <div class="bg-red-50 dark:bg-red-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-red-200 dark:border-red-800 print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-red-50 dark:bg-red-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-red-200 dark:border-red-800">
         <p class="text-red-800 dark:text-red-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.recommendations }}
         </p>
@@ -1878,13 +1914,13 @@
     
     <!-- Información del Evento -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         INFORMACIÓN DEL EVENTO
       </h3>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
         <!-- Datos del Evento -->
-        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg">
           <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
             📊 DATOS DEL EVENTO
           </h4>
@@ -1900,7 +1936,7 @@
         </div>
 
         <!-- Nivel de Alerta -->
-        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg">
           <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
             🚨 NIVEL DE ALERTA
           </h4>
@@ -1916,7 +1952,7 @@
 
     <!-- Ubicación -->
     <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
@@ -1926,10 +1962,10 @@
 
     <!-- Descripción -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         DESCRIPCIÓN
       </h3>
-      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
         <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.description }}
         </p>
@@ -1938,10 +1974,10 @@
 
     <!-- Recomendaciones -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
-      <div class="bg-orange-50 dark:bg-orange-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-orange-200 dark:border-orange-800 print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-orange-50 dark:bg-orange-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-orange-200 dark:border-orange-800">
         <p class="text-orange-800 dark:text-orange-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.recommendations }}
         </p>
@@ -1954,13 +1990,13 @@
     
       <!-- Información del Evento -->
       <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         INFORMACIÓN DEL EVENTO
       </h3>
       
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
         <!-- Datos del Evento -->
-        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <div class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg">
           <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
             📊 DATOS DEL EVENTO
           </h4>
@@ -1973,7 +2009,7 @@
         </div>
 
         <!-- Nivel de Alerta -->
-        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+        <div class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg">
           <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
             🚨 NIVEL DE ALERTA
           </h4>
@@ -1989,7 +2025,7 @@
 
     <!-- Ubicación -->
     <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
@@ -1999,10 +2035,10 @@
 
     <!-- Descripción -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         DESCRIPCIÓN
       </h3>
-      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg print:border print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
         <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.description }}
         </p>
@@ -2011,10 +2047,10 @@
 
     <!-- Recomendaciones -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
-      <div class="bg-purple-50 dark:bg-purple-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-purple-200 dark:border-purple-800 print:border-0 print:ring-1 print:ring-gray-100">
+      <div class="bg-purple-50 dark:bg-purple-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-purple-200 dark:border-purple-800">
         <p class="text-purple-800 dark:text-purple-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.recommendations }}
         </p>
@@ -2027,106 +2063,117 @@
 
       <!-- Reportes Automáticos -->
       <div v-if="reportCategory === 'automatic'">
+
         <!-- Reporte de Cierre de Turno -->
         <div v-if="selectedReportType === 'cierre'">
+          
           <!-- Información del Turno -->
-          <div class="mb-8">
-            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+          <div class="mt-2 mb-2"> 
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
               INFORMACIÓN DEL TURNO
             </h3>
-            <!-- 📄 Datos generales y estadísticas -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 print:grid-cols-2 print:gap-4 seccion-datos">
-              <div
-                class="bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 p-4 sm:p-6 rounded-lg 
-                       print:border print:border-0 print:ring-1 print:ring-gray-100"
-              >
-                <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-3">
-                  📊 DATOS GENERALES
-                </h4>
-                <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-                  <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
-                  <p class="print:text-black"><strong>Inicio:</strong> {{ activeShift?.startTime || 'No disponible' }}</p>
-                  <p class="print:text-black"><strong>Cierre:</strong> {{ getCurrentDateTime() }}</p>
-                  <p class="print:text-black"><strong>Total de Eventos:</strong> {{ events.length }}</p>
-                </div>
-              </div>
 
-              <div
-                class="bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 p-4 sm:p-6 rounded-lg 
-                       print:border print:border-0 print:ring-1 print:ring-gray-100"
-              >
-                <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-3">
-                  📈 ESTADÍSTICAS
-                </h4>
-                <div class="space-y-1 text-white text-[15px] print:text-[12px] print:space-y-2">
-                  <p class="print:text-black"><strong>Tiempo Resp. Promedio:</strong> {{ getAverageResponseTimeFiltered() }} min</p>
-                  <p class="print:text-black"><strong>Recursos Desplegados:</strong> {{ getTotalResourcesDeployedFiltered() }}</p>
-                  <p class="print:text-black"><strong>Cámaras Activas:</strong> {{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
-                  <p class="print:text-black"><strong>Eventos Críticos:</strong> {{ getEventsByPriorityFiltered('critica') }}</p>
-                </div>
-              </div>
-            </div>
+<!-- Datos generales y estadísticas -->
+<div class="flex justify-center items-stretch gap-2 sm:gap-4 md:gap-6 print:gap-4 seccion-datos h-full">
+  
+  <!-- 🟦 Datos generales -->
+  <div class="flex flex-col 
+              bg-blue-50 dark:bg-blue-900/20 print:bg-blue-50 print:dark:bg-blue-50 
+              p-4 sm:p-6 rounded-lg
+              flex-1 text-left">
+    <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-2 sm:mb-3 
+               text-[10px] sm:text-sm md:text-base">
+      DATOS GENERALES
+    </h4>
+    <div class="flex-1 flex flex-col text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
+      <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
+      <p class="print:text-black"><strong>Inicio:</strong> {{ activeShift?.startTime || 'No disponible' }}</p>
+      <p class="print:text-black"><strong>Cierre:</strong> {{ getCurrentDateTime() }}</p>
+      <p class="print:text-black"><strong>Total de Eventos:</strong> {{ events.length }}</p>
+    </div>
+  </div>
+
+  <!-- 🟩 Estadísticas -->
+  <div class="flex flex-col 
+              bg-green-50 dark:bg-green-900/20 print:bg-green-50 print:dark:bg-green-50 
+              p-4 sm:p-6 rounded-lg
+              flex-1 text-left">
+    <h4 class="font-bold text-green-900 dark:text-green-200 print:text-black mb-2 sm:mb-3 
+               text-[10px] sm:text-sm md:text-base">
+      📈 ESTADÍSTICAS
+    </h4>
+    <div class="flex-1 flex flex-col text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
+      <p class="print:text-black"><strong>Tiempo Resp. Promedio:</strong> {{ getAverageResponseTimeFiltered() }} min</p>
+      <p class="print:text-black"><strong>Recursos Desplegados:</strong> {{ getTotalResourcesDeployedFiltered() }}</p>
+      <p class="print:text-black"><strong>Cámaras Activas:</strong> {{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
+      <p class="print:text-black"><strong>Eventos Críticos:</strong> {{ getEventsByPriorityFiltered('critica') }}</p>
+    </div>
+  </div>
+
+</div>
+
           </div>
 
-                <!-- Resumen por Prioridad -->
+<!-- Resumen por Prioridad -->
                 <div class="mb-8">
-            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
               RESUMEN POR PRIORIDAD
             </h3>
 
-            <!-- 🔹 Contenedor flexible con scroll horizontal en móviles -->
-            <div class="flex flex-nowrap gap-2 sm:gap-4 overflow-x-auto pb-2 sm:grid sm:grid-cols-4 sm:overflow-visible sm:pb-0">
+           <!-- 🔹 Contenedor flexible con scroll horizontal en móviles -->
+<div class="grid grid-cols-4 gap-2 sm:gap-4 pb-2 sm:pb-4 print:gap-2">
     
-              <!-- 🔴 Críticos -->
-              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-red-50 to-red-100 
-                dark:from-red-900 dark:to-red-800 print:bg-white rounded-xl border border-red-200 
-                dark:border-red-700 print:border-0 print:ring-1 print:ring-gray-100">
-                <div class="text-2xl sm:text-4xl font-bold text-red-600 dark:text-red-400 print:text-black">
-                  {{ getEventsByPriorityFiltered('critica') }}
-                </div>
-                <div class="text-xs sm:text-sm text-red-600 dark:text-red-400 print:text-black mt-2 font-medium">
-                  🔴 Críticos
-                </div>
-              </div>
+  <!-- 🔴 Críticos -->
+  <div class="w-full p-1 sm:p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-200 
+              dark:border-red-700 flex flex-col items-center justify-center
+              print:bg-red-100 print:border-0 print:ring-1 print:ring-gray-100">
+    <div class="text-[14px] sm:text-4xl font-bold text-red-600 dark:text-red-200 print:text-black">
+      {{ getEventsByPriorityFiltered('critica') }}
+    </div>
+    <div class="text-[6px] sm:text-sm text-red-600 dark:text-red-200 print:text-black mt-1 sm:mt-2 font-medium">
+      🔴 Críticos
+    </div>
+  </div>
 
-              <!-- 🟠 Altos -->
-              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-orange-50 to-orange-100 
-                dark:from-orange-900 dark:to-orange-800 print:bg-white rounded-xl border border-orange-200 
-                dark:border-orange-700 print:border-0 print:ring-1 print:ring-gray-100">
-                <div class="text-2xl sm:text-4xl font-bold text-orange-600 dark:text-orange-400 print:text-black">
-                  {{ getEventsByPriorityFiltered('alta') }}
-                </div>
-                <div class="text-xs sm:text-sm text-orange-600 dark:text-orange-400 print:text-black mt-2 font-medium">
-                  🟠 Altos
-                </div>
-              </div>
+  <!-- 🟠 Altos -->
+  <div class="w-full p-1 sm:p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-200 
+              dark:border-orange-700 flex flex-col items-center justify-center
+              print:bg-orange-100 print:border-0 print:ring-1 print:ring-gray-100">
+    <div class="text-[14px] sm:text-4xl font-bold text-orange-600 dark:text-orange-200 print:text-black">
+      {{ getEventsByPriorityFiltered('alta') }}
+    </div>
+    <div class="text-[6px] sm:text-sm text-orange-600 dark:text-orange-200 print:text-black mt-1 sm:mt-2 font-medium">
+      🟠 Altos
+    </div>
+  </div>
 
-              <!-- 🟡 Medios -->
-              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 
-                dark:from-yellow-900 dark:to-yellow-800 print:bg-white rounded-xl border border-yellow-200 
-                dark:border-yellow-700 print:border-0 print:ring-1 print:ring-gray-100">
-                <div class="text-2xl sm:text-4xl font-bold text-yellow-600 dark:text-yellow-400 print:text-black">
-                  {{ getEventsByPriorityFiltered('media') }}
-                </div>
-                <div class="text-xs sm:text-sm text-yellow-600 dark:text-yellow-400 print:text-black mt-2 font-medium">
-                  🟡 Medios
-                </div>
-              </div>
+  <!-- 🟡 Medios -->
+  <div class="w-full p-1 sm:p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl border border-yellow-200 
+              dark:border-yellow-700 flex flex-col items-center justify-center
+              print:bg-yellow-100 print:border-0 print:ring-1 print:ring-gray-100">
+    <div class="text-[14px] sm:text-4xl font-bold text-yellow-600 dark:text-yellow-200 print:text-black">
+      {{ getEventsByPriorityFiltered('media') }}
+    </div>
+    <div class="text-[6px] sm:text-sm text-yellow-600 dark:text-yellow-200 print:text-black mt-1 sm:mt-2 font-medium">
+      🟡 Medios
+    </div>
+  </div>
 
-              <!-- 🟢 Bajos -->
-              <div class="min-w-[120px] sm:min-w-0 flex-shrink-0 text-center p-3 sm:p-6 bg-gradient-to-br from-green-50 to-green-100 
-                dark:from-green-900 dark:to-green-800 print:bg-white rounded-xl border border-green-200 
-                dark:border-green-700 print:border-0 print:ring-1 print:ring-gray-100">
-                <div class="text-2xl sm:text-4xl font-bold text-green-600 dark:text-green-400 print:text-black">
-                  {{ getEventsByPriorityFiltered('baja') }}
-                </div>
-                <div class="text-xs sm:text-sm text-green-600 dark:text-green-400 print:text-black mt-2 font-medium">
-                  🟢 Bajos
-                </div>
-              </div>
+  <!-- 🟢 Bajos -->
+  <div class="w-full p-1 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 
+              dark:border-green-700 flex flex-col items-center justify-center
+              print:bg-green-100 print:border-0 print:ring-1 print:ring-gray-100">
+    <div class="text-[14px] sm:text-4xl font-bold text-green-600 dark:text-green-200 print:text-black">
+      {{ getEventsByPriorityFiltered('baja') }}
+    </div>
+    <div class="text-[6px] sm:text-sm text-green-600 dark:text-green-200 print:text-black mt-1 sm:mt-2 font-medium">
+      🟢 Bajos
+    </div>
+  </div>
 
-            </div>
-                </div> 
+</div>
+          </div>
+
                 <!-- Detalle de Eventos -->
                 <div class="mb-8" v-if="events.length > 0">
                   <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">DETALLE DE EVENTOS</h3>
@@ -2184,7 +2231,7 @@
 
               <!-- Reporte Distribucional -->
               <div v-if="selectedReportType === 'distribucional'">
-                <div class="mb-8">
+                <div class="mt-2 mb-2"> 
                   <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">DISTRIBUCIÓN TERRITORIAL</h3>
                   
                   <!-- Solo mostrar comunidades con eventos -->
@@ -2396,7 +2443,7 @@
 
             <!-- Footer del Reporte -->
             <div 
-              class="text-center text-sm text-gray-500 dark:text-gray-400 p-6 border-t border-gray-200 dark:border-gray-600 mt-8 print-footer">
+              class="text-center text-sm text-gray-500 dark:text-gray-400 p-6 border-t border-gray-200 dark:border-gray-600 mt-8 print-footer hidden">
               <div class="max-w-3xl mx-auto">
                 <div v-if="sources.length > 0" class="flex flex-col items-center space-y-2 mb-4">
                   <span class="font-medium text-gray-500 dark:text-gray-400">🌐 Fuentes:</span>
