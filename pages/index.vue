@@ -1297,7 +1297,8 @@
                     
                     <template v-else-if="manualReport.weather.alertType === 'huracan'">
                       <option value="huracan_cat1">🌀 Huracán Categoría 1-2</option>
-                      <option value="huracan_cat3">🌀🌀 Huracán Categoría 3+</option>
+                      <option value="huracan_cat3">🌀🌀 Huracán Categoría 3-4</option>
+                      <option value="huracan_cat5">🌀🌀🌀 Huracán Categoría 5</option>
                     </template>
                     
                     <!-- Fenómenos Geológicos -->
@@ -1374,7 +1375,7 @@
                             class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
                     </div>
 
-                    <div v-if="manualReport.weather.alertType === 'lluvia'">
+                    <div v-if="['lluvia', 'tormenta', 'huracan', 'inundacion'].includes(manualReport.weather.alertType)">
                       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Intensidad</label>
                       <select v-model="manualReport.weather.intensity"
                               class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
@@ -1739,7 +1740,7 @@
       📊 DATOS DEL EVENTO
     </h4>
 
-    <div class="space-y-1 text-black text-xs sm:text-sm md:text-base print:text-[12px] print:space-y-2">
+    <div class="space-y-1 text-black dark:text-white text-xs sm:text-sm md:text-base print:text-[12px] print:space-y-2">
       <p class="print:text-black"><strong>Tipo:</strong> {{ getWeatherAlertTitle() }}</p>
       <p v-if="manualReport.weather.affectedZones?.length" class="print:text-black">
         <strong>Zona:</strong> {{ getAffectedZoneText() }}
@@ -2493,6 +2494,7 @@ export default {
       currentDateTime: '',
       activeTab: 'dashboard',
       activeShift: null,
+      uploadedImages: [],
       closedShifts: [],
       showTurnCodeModal: false,
       showEndShiftModal: false,
