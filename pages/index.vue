@@ -4356,19 +4356,22 @@ removeSource(index) {
    
 @media print {
   @page {
-    margin: 0%;
-  }
-  .print-footer {
-    display:none  !important; 
+    size: A4;
+    margin: 1cm 1cm 1cm 1cm;
   }
 
   .print-footer {
-    display: block !important; 
-    position:static !important;
-    page-break-before: always !important;
+    display: block !important;
+    position: fixed !important; 
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
     padding: 10px 1.5cm !important;
     border-top: 2px solid #3b82f6 !important;
     background-color: #eff6ff !important;
+    z-index: 9999 !important;
+    page-break-inside: avoid !important;
     text-align: center !important;
     font-size: 0.9em !important;
     color: #1e40af !important;
@@ -4851,4 +4854,3 @@ textarea {
     visibility: hidden !important;
   }
 </style>
- 
