@@ -1256,6 +1256,7 @@
                       <option value="tormenta">🌪️ Tormenta Tropical</option> 
                       <option value="post_ciclone">🌪️ Post-Ciclón Tropical</option>
                       <option value="onda">🌬️ Onda Tropical</option>
+                      <option value="frente_frio">🌬️ Frente Frío</option>
                     </template>
                     
                     <!-- Fenómenos de Tormenta -->
