@@ -29,7 +29,7 @@
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
         <div class="flex flex-col sm:flex-row justify-between items-center h-auto sm:h-16 py-3 sm:py-0">
           <div class="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-0">
-            <div class="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-primary to-purple-600 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
+            <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
               <img src="./Escudo_de_Roatan.png" 
                      alt="Escudo de Roatan" 
                      class="h-10 w-auto sm:h-12 md:h-14 print:h-10 print:w-10">
@@ -188,7 +188,7 @@
 
     <!-- Modal de Mapa -->
     <div v-if="showMapModal" class="modal">
-      <div class="modal-content modal-map-content p-4 sm:p-6">
+      <div class="modal-content modal-map-content p-4 sm:p-6 w-full max-w-3xl">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Seleccionar Ubicación en el Mapa</h2>
         <div id="modal-map" class="h-64 sm:h-96 lg:h-[500px] border-2 border-gray-200 dark:border-gray-600 rounded-lg mb-4"></div>
         <div v-if="tempCoordinates.lat && tempCoordinates.lng" class="mb-4 text-sm text-gray-600 dark:text-gray-400">
@@ -207,7 +207,7 @@
 
     <!-- Modal de Mapa para Reportes Manuales -->
     <div v-if="showManualReportMapModal" class="modal">
-      <div class="modal-content modal-map-content p-4 sm:p-6">
+      <div class="modal-content modal-map-content p-4 sm:p-6 w-full max-w-3xl">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Seleccionar Ubicación para el Reporte</h2>
         <div id="manual-report-map" class="h-64 sm:h-96 lg:h-[500px] border-2 border-gray-200 dark:border-gray-600 rounded-lg mb-4"></div>
         <div v-if="tempManualReportCoordinates.lat && tempManualReportCoordinates.lng" class="mb-4 text-sm text-gray-600 dark:text-gray-400">
@@ -1256,13 +1256,13 @@
                       <option value="tormenta">🌪️ Tormenta Tropical</option> 
                       <option value="post_ciclone">🌪️ Post-Ciclón Tropical</option>
                       <option value="onda">🌬️ Onda Tropical</option>
-                      <option value="frente_frio">🌬️ Frente Frío</option>
+                      <option value="frio">🧊 Frente Frío</option>
                     </template>
                     
                     <!-- Fenómenos de Tormenta -->
                     <template v-else-if="manualReport.weather.alertType === 'tormenta'">
                       <option value="electrica">⚡ Tormenta Eléctrica</option>
-                      <option value="granizo">🧊 Tormenta de Granizo</option>
+                      <option value="frio">🧊 Frente Frío</option>
                     </template>
                     
                     <!-- Sargazo -->
@@ -1516,14 +1516,14 @@
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Descripción Detallada</label>
                 <textarea v-model="manualReport.description" rows="4"
                           placeholder="Describa la situación, medidas a tomar y recomendaciones..."
-                          class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"></textarea>
+                          class="w-full px-3 py-2 text-base border-0 border-b-2 border-white rounded-none focus:ring-2 focus:ring-0 focus:border-white dark:bg-gray-700 dark:text-white"></textarea>
               </div>
 
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Recomendaciones para la Población</label>
                 <textarea v-model="manualReport.recommendations" rows="3"
                           placeholder="Instrucciones específicas para los ciudadanos..."
-                          class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white"></textarea>
+                          class="w-full px-3 py-2 text-base border-0 border-b-2 border-white rounded-none focus:ring-2 focus:ring-0 focus:border-white dark:bg-gray-700 dark:text-white"></textarea>
               </div>
 
               <!-- 📸 Subir fotos -->
@@ -1686,28 +1686,7 @@
                   {{ getCurrentDateTime() }}
                 </p>
               </div>
-
-              <!-- Icono y subtítulo del Reporte -->
-              <div class="absolute right-0 top-0 flex flex-col items-center justify-start text-center 
-                w-20 sm:w-24 md:w-32 lg:w-36 
-                print:relative print:right-auto print:w-auto print:flex-shrink-0">
-
-                <template v-if="reportCategory === 'manual' && selectedManualReportType === 'weather'">
-                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
-                </template>
-
-                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'security'">
-                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
-                </template>
-
-                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'traffic'">
-                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
-                </template>
-
-                <template v-else-if="reportCategory === 'manual' && selectedManualReportType === 'public_service'">
-                  <div class="text-[28px] lg:text-6xl print:text-5xl">⚠️</div>
-                </template>
-              </div>
+              
             </div>
           </div>
 
@@ -1805,45 +1784,14 @@
 
           </div>
 
-        <!-- Ubicación del Evento -->
-        <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
-            UBICACIÓN
-          </h3>
-          <div class="h-80 md:h-96 print-map-container">
-            <div id="report-map" style="height: 100%; border-radius: 8px;" class="print-visible-map"></div>
-          </div>
-        </div>
-
-        <!-- Descripción -->
-        <div class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
-            DESCRIPCIÓN
-          </h3>
-          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
-            <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
-          {{ manualReport.description }}
-            </p>
-          </div>
-        </div>
-
-       <!-- Recomendaciones -->
-        <div class="mb-8">
-          <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
-            RECOMENDACIONES PARA LA POBLACIÓN
-          </h3>
-          <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
-            <p class="text-blue-800 dark:text-blue-300 print:text-black text-[15px] print:text-[12px]">
-            {{ manualReport.recommendations }}
-            </p>
-          </div>
-        </div>
+        <!-- Secciones de Ubicación, Descripción y Recomendaciones eliminadas de la vista general
+             ya que se muestran en las secciones específicas de cada tipo de reporte -->
 
         <!-- Aviso de Seguridad -->
         <div v-if="selectedManualReportType === 'security'"> 
           <!-- Información del Evento -->
           <div class="mb-8">
-            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black">
+            <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
               INFORMACIÓN DEL EVENTO
             </h3>
       
@@ -1878,7 +1826,7 @@
 
      <!-- Ubicación -->
      <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
@@ -1888,7 +1836,7 @@
 
      <!-- Descripción -->
      <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         DESCRIPCIÓN
       </h3>
       <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
@@ -1900,11 +1848,11 @@
 
      <!-- Recomendaciones -->
      <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black pb-2">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
-      <div class="bg-red-50 dark:bg-red-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-red-200 dark:border-red-800">
-        <p class="text-red-800 dark:text-red-300 print:text-black text-[15px] print:text-[12px]">
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
+        <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.recommendations }}
         </p>
       </div>
@@ -1916,7 +1864,7 @@
     
     <!-- Información del Evento -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         INFORMACIÓN DEL EVENTO
       </h3>
       
@@ -1954,7 +1902,7 @@
 
     <!-- Ubicación -->
     <div v-if="manualReport.coordinates.lat && manualReport.coordinates.lng" class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         UBICACIÓN
       </h3>
       <div class="print-map-container h-80 md:h-96">
@@ -1964,7 +1912,7 @@
 
     <!-- Descripción -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         DESCRIPCIÓN
       </h3>
       <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
@@ -1976,11 +1924,11 @@
 
     <!-- Recomendaciones -->
     <div class="mb-8">
-      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2">
+      <h3 class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-black pb-2">
         RECOMENDACIONES PARA LA POBLACIÓN
       </h3>
-      <div class="bg-orange-50 dark:bg-orange-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-orange-200 dark:border-orange-800">
-        <p class="text-orange-800 dark:text-orange-300 print:text-black text-[15px] print:text-[12px]">
+      <div class="bg-gray-50 dark:bg-gray-700 print:bg-white p-4 sm:p-6 rounded-lg">
+        <p class="text-gray-700 dark:text-gray-300 print:text-black text-[15px] print:text-[12px]">
           {{ manualReport.recommendations }}
         </p>
       </div>
@@ -2297,7 +2245,7 @@
                             </p>
                             <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1 print:mb-0.5">
                               <strong>Ubicación:</strong>
-                              {{ event.location.neighborhood || 'No especificado' }}
+                              {{ event.location.community ? `${event.location.community}` : '' }}{{ event.location.neighborhood ? ` - ${event.location.neighborhood}` : '' }}
                               <span v-if="event.location.reference">
                                 - {{ event.location.reference }}
                               </span>
@@ -2469,8 +2417,7 @@
 
                 <p>Municipalidad de Roatán</p>
                 <p>📞 Emergencias: *1101</p>
-                <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p> 
-                <p>Documento generado el {{ getCurrentDateTime() }}</p>
+                <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p>
               </div>
             </div>
 
@@ -3286,9 +3233,17 @@ removeSource(index) {
         this.modalMap.remove()
       }
       
-      this.modalMap = L.map('modal-map').setView([16.3291, -86.5392], 12)
+      this.modalMap = L.map('modal-map', {
+        zoomControl: false,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: false,
+        keyboard: false,
+        touchZoom: false
+      }).setView([16.3291, -86.5392], 12)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
+        attribution: '© OpenStreetMap contributors',
+        zoomControl: false
       }).addTo(this.modalMap)
       
       let marker = null
@@ -3316,7 +3271,11 @@ removeSource(index) {
         this.manualReportMap.remove()
       }
       
-      this.manualReportMap = L.map('manual-report-map').setView([16.3291, -86.5392], 12)
+      this.manualReportMap = L.map('manual-report-map', {
+        zoomControl: false,  // Solo ocultamos el control de zoom
+        attributionControl: false // Desactivar el control de atribución
+      }).setView([16.3291, -86.5392], 12)
+      
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
       }).addTo(this.manualReportMap)
@@ -3382,7 +3341,11 @@ removeSource(index) {
           const lat = this.manualReport.coordinates.lat
           const lng = this.manualReport.coordinates.lng
           
-          this.reportMap = L.map('report-map').setView([lat, lng], 13)
+          this.reportMap = L.map('report-map', {
+            zoomControl: false,  // Desactivar controles de zoom
+            attributionControl: false // Desactivar control de atribución
+          }).setView([lat, lng], 13)
+          
           L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
           }).addTo(this.reportMap)
@@ -3678,15 +3641,28 @@ removeSource(index) {
     },
 
     generateManualReport() {
+      // Validar campos requeridos
+      if (!this.manualReport.description || !this.manualReport.recommendations) {
+        alert('Por favor complete todos los campos obligatorios')
+        return
+      }
+      
       this.showReport = true
+      this.reportCategory = 'manual'
+      
+      // Cerrar el formulario de reporte manual
       this.showManualReportForm = false
+      
+      // Inicializar el mapa después de que se muestre el reporte
       this.$nextTick(() => {
-        if (this.manualReport.coordinates.lat && this.manualReport.coordinates.lng) {
-          setTimeout(() => {
+        // Esperar a que el DOM se actualice completamente
+        setTimeout(() => {
+          if (this.manualReport.coordinates.lat && this.manualReport.coordinates.lng) {
             this.initReportMap()
-          }, 100)
-        }
-        document.getElementById('report-content').scrollIntoView({ behavior: 'smooth' })
+          }
+          // Desplazarse a la sección del reporte
+          document.getElementById('report-content').scrollIntoView({ behavior: 'smooth' })
+        }, 300) // Aumentamos el tiempo de espera para asegurar que el DOM esté listo
       })
     },
 
@@ -4321,13 +4297,22 @@ removeSource(index) {
     visibility: visible !important;
     display: block !important;
     width: 100% !important;
-    height: 400px !important;
+    height: 300px !important;
     background: white !important;
-    border: 1px solid #000 !important;
+    position: relative !important;
   }
   
-  .print-map-container .leaflet-container {
-    background: white !important;
+  /* Asegurar que el contenedor del mapa no tenga desbordamiento */
+  .print-map-container {
+    overflow: hidden !important;
+    position: relative !important;
+  }
+  
+  /* Asegurar que el mapa ocupe todo el espacio disponible */
+  .leaflet-container {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
   }
   
   #app, #report-content, .report-print {
@@ -4354,16 +4339,16 @@ removeSource(index) {
   .dashboard-print-header img {
     margin-right: 10px;
   } 
-   
+  
 @media print {
   @page {
     size: A4;
-    margin: 1cm 1cm 1cm 1cm;
+    margin: 0;   /* Eliminar márgenes por defecto */
+    size: auto;  /* Tamaño de página automático */
   }
 
   .print-footer {
-    display: block !important;
-    position: fixed !important; 
+    display: block !important; 
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
@@ -4377,14 +4362,54 @@ removeSource(index) {
     font-size: 0.9em !important;
     color: #1e40af !important;
   } 
+  
+  /* Ocultar controles de zoom de Leaflet en impresión */
+  .leaflet-control-zoom, 
+  .leaflet-control-zoom-in, 
+  .leaflet-control-zoom-out {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  
+  /* Asegurar que los mapas se muestren correctamente */
+  .leaflet-container {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    transform: none !important; /* Evitar transformaciones que puedan afectar la posición */
+  }
+  
+  /* Asegurar que el mapa ocupe todo el ancho disponible */
+  #report-map {
+    width: 100% !important;
+    height: 300px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+  }
+  
+  /* Asegurar que el contenedor de impresión no tenga márgenes adicionales */
+  .print-map-container {
+    margin: 0 auto !important;
+    padding: 0 !important;
+    width: 100% !important;
+    height: 300px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
 }
 
   
   /* Asegurar que los contenedores no tengan márgenes ni padding */
   .container, .mx-auto, .p-4, .p-6, .px-4, .py-4, .m-4, .my-4, .mx-4 {
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
     max-width: 100% !important;
+    width: 100% !important;
   }
   
   .report-print * {
@@ -4513,7 +4538,7 @@ removeSource(index) {
 .modal-content {
   background: white;
   border-radius: 8px;
-  max-width: min(90%, 600px);
+  max-width: min(90%, 900px);
   max-height: 90%;
   overflow: auto;
   margin: 0 auto;
