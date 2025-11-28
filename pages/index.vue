@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="bg-gray-50 dark:bg-gray-900 min-h-screen">
+  <div id="app" class="dark:bg-gray-900 min-h-screen">
     
     <!-- Header del Dashboard para Impresión (solo para dashboard) -->
     <div v-if="activeTab === 'dashboard'" class="dashboard-print-header print:block hidden" style="display: none;">
