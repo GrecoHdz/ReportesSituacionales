@@ -186,6 +186,229 @@
       </div>
     </div>
 
+    <!-- Modal de Editar Evento -->
+    <div v-if="showEditEventModal" class="modal">
+      <div class="modal-content p-4 sm:p-6 max-w-4xl">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Editar Evento: {{ editingEvent?.code }}</h2>
+        <form @submit.prevent="updateEvent" class="space-y-6">
+          <!-- Información Básica -->
+          <div class="input-group">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">ℹ️ Información Básica</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tipo de Evento</label>
+                <select v-model="editingEventData.type" required
+                        class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+                  <option value="">Seleccionar tipo</option>
+                  <option v-for="type in eventTypes" :key="type.id" :value="type.id">{{ type.name }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Código</label>
+                <input v-model="editingEventData.code" type="text" readonly
+                       class="w-full px-3 py-2 text-base bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg dark:text-white">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prioridad</label>
+                <select v-model="editingEventData.priority"
+                        class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+                  <option value="baja">🟢 Baja</option>
+                  <option value="media">🟡 Media</option>
+                  <option value="alta">🟠 Alta</option>
+                  <option value="critica">🔴 Crítica</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ubicación -->
+          <div class="input-group">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">📍 Ubicación del Evento</h3>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Comunidad</label>
+                <select v-model="editingEventData.location.community" @change="onEditCommunityChange" 
+                        class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+                  <option value="">Seleccionar comunidad</option>
+                  <option v-for="community in communities" :key="community.id" :value="community.id">{{ community.name }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Barrio/Colonia</label>
+                <select v-model="editingEventData.location.neighborhood" :disabled="!editingEventData.location.community"
+                        class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white disabled:opacity-50">
+                  <option value="">Seleccionar barrio</option>
+                  <option v-for="neighborhood in editAvailableNeighborhoods" :key="neighborhood" :value="neighborhood">{{ neighborhood }}</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Referencia Cercana</label>
+                <input v-model="editingEventData.location.reference" type="text"
+                       placeholder="Ej: Cerca del parque central"
+                       class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+              </div>
+            </div>
+          </div>
+
+          <!-- Afectaciones -->
+          <div class="input-group">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">📊 Afectaciones</h3>
+            <div class="space-y-4">
+              <div v-for="category in impactCategories" :key="category.id" 
+                   class="bg-gray-50 dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden"
+                   :class="category.bgClass">
+                
+                <!-- Category Header -->
+                <div class="px-4 py-3 bg-white dark:bg-gray-600">
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                      <input type="checkbox"
+                             :id="'edit_category_' + category.id"
+                             @change="toggleEditCategoryImpacts(category)"
+                             :checked="isEditCategorySelected(category)"
+                             class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                      <label :for="'edit_category_' + category.id" class="flex items-center gap-2 cursor-pointer">
+                        <span class="text-xl">{{ category.icon }}</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">
+                          {{ category.label }}
+                        </span>
+                      </label>
+                      <span v-if="getEditCategoryActiveCount(category) > 0" 
+                            class="px-2 py-1 text-xs font-bold rounded-full bg-green-500 text-white">
+                        {{ getEditCategoryActiveCount(category) }}
+                      </span>
+                    </div>
+                    <button @click="toggleEditCategory(category.id)"
+                            type="button"
+                            class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                      <svg class="w-5 h-5 transition-transform" 
+                           :class="{ 'rotate-180': editExpandedCategories[category.id] }"
+                           fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Category Content -->
+                <div v-show="editExpandedCategories[category.id]" 
+                     class="px-4 py-4 bg-white dark:bg-gray-600 border-t border-gray-200 dark:border-gray-700">
+                  <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div v-for="impact in category.impacts" :key="impact.id" 
+                         class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                      <div class="flex items-center mb-2">
+                        <input type="checkbox"
+                               v-model="editingEventData.impacts[impact.id]"
+                               :id="'edit_impact_' + impact.id"
+                               :disabled="!editExpandedCategories[category.id]"
+                               class="mr-3 w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary disabled:opacity-50">
+                        <label :for="'edit_impact_' + impact.id" 
+                               class="text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50">
+                          {{ impact.label }}
+                        </label>
+                      </div>
+                      <input v-if="editingEventData.impacts[impact.id]"
+                             v-model="editingEventData.impactDetails[impact.id]"
+                             type="text"
+                             :placeholder="impact.placeholder"
+                             class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Instituciones y Recursos -->
+          <div class="input-group">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">🚓 Instituciones y Recursos</h3>
+            <div class="space-y-4 print:space-y-2">
+              <div v-for="institution in institutions" :key="institution.id"
+                   class="bg-gray-50 dark:bg-gray-600 rounded-lg p-4">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between mb-3">
+                  <label class="text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300 flex items-center cursor-pointer mb-2 lg:mb-0">
+                    <input type="checkbox" v-model="editingEventData.institutionsUsed[institution.id]"
+                           class="mr-3 w-4 h-4 sm:w-5 sm:h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                    <span class="text-xl sm:text-2xl mr-3">{{ institution.icon }}</span>
+                    {{ institution.name }}
+                  </label>
+                  <div v-if="editingEventData.institutionsUsed[institution.id]" class="text-sm text-gray-600 dark:text-gray-400">
+                    <label class="block text-xs font-medium mb-1">T. Resp. Estimado (min)</label>
+                    <input v-model.number="editingEventData.responseTimeEstimated[institution.id]" type="number" min="0"
+                           :placeholder="institution.responseTime"
+                           class="w-16 sm:w-20 px-2 py-1 text-base border border-gray-300 dark:border-gray-600 rounded focus:ring-1 focus:ring-primary dark:bg-gray-700 dark:text-white">
+                  </div>
+                </div>
+                <div v-if="editingEventData.institutionsUsed[institution.id]" class="ml-0 lg:ml-8">
+                  <label class="block text-sm font-medium text-gray-600 dark:text-gray-400 mb-3">Recursos Utilizados:</label>
+                  <div class="space-y-2">
+                    <div v-for="resource in institution.resources" :key="resource.id" class="flex flex-col lg:flex-row items-start lg:items-center space-y-2 lg:space-y-0 lg:space-x-3">
+                      <div class="flex items-center">
+                        <input type="checkbox"
+                               v-model="editingEventData.resourcesUsed[institution.id + '_' + resource.id]"
+                               :id="'edit_res_' + institution.id + '_' + resource.id"
+                               class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
+                        <label :for="'edit_res_' + institution.id + '_' + resource.id" class="text-sm flex-1 font-medium ml-2">
+                          {{ resource.name }}
+                        </label>
+                      </div>
+                      <input v-if="editingEventData.resourcesUsed[institution.id + '_' + resource.id]"
+                             v-model.number="editingEventData.resourceSpecifications[institution.id + '_' + resource.id]"
+                             type="number"
+                             min="0"
+                             placeholder="Cantidad"
+                             class="w-16 sm:w-20 px-2 py-1 text-base border border-gray-300 dark:border-gray-600 rounded focus:ring-1 focus:ring-primary dark:bg-gray-700 dark:text-white">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+            <button type="button" @click="showEditEventModal = false" class="btn-secondary w-full sm:w-auto">
+              Cancelar
+            </button>
+            <button type="submit" class="btn-primary w-full sm:w-auto">
+              Guardar Cambios
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal de Confirmar Eliminación -->
+    <div v-if="showDeleteEventModal" class="modal">
+      <div class="modal-content p-4 sm:p-6">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Confirmar Eliminación</h2>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          ¿Está seguro que desea eliminar el evento <strong>{{ eventToDelete?.code }}</strong>?
+        </p>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Esta acción no se puede deshacer.
+        </p>
+        <div class="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3 mb-4">
+          <div class="flex items-start">
+            <span class="text-yellow-500 mr-2">⚠️</span>
+            <div>
+              <p class="text-sm text-yellow-800 dark:text-yellow-200 font-medium">Información del evento:</p>
+              <p class="text-sm text-yellow-700 dark:text-yellow-300">{{ getEventTypeName(eventToDelete?.type) }}</p>
+              <p class="text-sm text-yellow-700 dark:text-yellow-300">Prioridad: {{ eventToDelete?.priority?.toUpperCase() }}</p>
+              <p class="text-sm text-yellow-700 dark:text-yellow-300">Registrado por: {{ eventToDelete?.registeredBy }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-3">
+          <button @click="showDeleteEventModal = false" class="btn-secondary w-full sm:w-auto">
+            Cancelar
+          </button>
+          <button @click="deleteEvent" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg w-full sm:w-auto">
+            Eliminar Evento
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de Mapa -->
     <div v-if="showMapModal" class="modal">
       <div class="modal-content modal-map-content p-4 sm:p-6 w-full max-w-3xl">
@@ -773,10 +996,15 @@
             <!-- Ubicación -->
             <div class="input-group">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">📍 Ubicación del Evento</h3>
+              <div v-if="newEvent.type === 'llamada_falsa'" class="mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+                <p class="text-sm text-yellow-800 dark:text-yellow-200">
+                  ⚠️ La ubicación es opcional para llamadas falsas
+                </p>
+              </div>
               <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Comunidad</label>
-                  <select v-model="newEvent.location.community" @change="onCommunityChange" required
+                  <select v-model="newEvent.location.community" @change="onCommunityChange" :required="newEvent.type !== 'llamada_falsa'"
                           class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
                     <option value="">Seleccionar comunidad</option>
                     <option v-for="community in communities" :key="community.id" :value="community.id">{{ community.name }}</option>
@@ -856,22 +1084,68 @@
             <!-- Afectaciones -->
             <div class="input-group">
               <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">📊 Afectaciones</h3>
-              <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-                <div v-for="impact in impactTypes" :key="impact.id" class="bg-gray-50 dark:bg-gray-600 p-3 rounded-lg">
-                  <div class="flex items-center mb-2">
-                    <input type="checkbox"
-                           v-model="newEvent.impacts[impact.id]"
-                           :id="'impact_' + impact.id"
-                           class="mr-3 w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
-                    <label :for="'impact_' + impact.id" class="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {{ impact.label }}
-                    </label>
+              <div class="space-y-4">
+                <div v-for="category in impactCategories" :key="category.id" 
+                     class="bg-gray-50 dark:bg-gray-600 border-2 border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden"
+                     :class="category.bgClass">
+                  
+                  <!-- Category Header -->
+                  <div class="px-4 py-3 bg-white dark:bg-gray-600">
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-3">
+                        <input type="checkbox"
+                               :id="'category_' + category.id"
+                               @change="toggleCategoryImpacts(category)"
+                               :checked="isCategorySelected(category)"
+                               class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary">
+                        <label :for="'category_' + category.id" class="flex items-center gap-2 cursor-pointer">
+                          <span class="text-xl">{{ category.icon }}</span>
+                          <span class="font-semibold text-gray-900 dark:text-white">
+                            {{ category.label }}
+                          </span>
+                        </label>
+                        <span v-if="getCategoryActiveCount(category) > 0" 
+                              class="px-2 py-1 text-xs font-bold rounded-full bg-green-500 text-white">
+                          {{ getCategoryActiveCount(category) }}
+                        </span>
+                      </div>
+                      <button @click="toggleCategory(category.id)"
+                              type="button"
+                              class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
+                        <svg class="w-5 h-5 transition-transform" 
+                             :class="{ 'rotate-180': expandedCategories[category.id] }"
+                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </button>
+                    </div>
                   </div>
-                  <input v-if="newEvent.impacts[impact.id]"
-                         v-model="newEvent.impactDetails[impact.id]"
-                         type="text"
-                         :placeholder="impact.placeholder"
-                         class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+
+                  <!-- Category Content -->
+                  <div v-show="expandedCategories[category.id]" 
+                       class="px-4 py-4 bg-white dark:bg-gray-600 border-t border-gray-200 dark:border-gray-700">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                      <div v-for="impact in category.impacts" :key="impact.id" 
+                           class="bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">
+                        <div class="flex items-center mb-2">
+                          <input type="checkbox"
+                                 v-model="newEvent.impacts[impact.id]"
+                                 :id="'impact_' + impact.id"
+                                 :disabled="!expandedCategories[category.id]"
+                                 class="mr-3 w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary disabled:opacity-50">
+                          <label :for="'impact_' + impact.id" 
+                                 class="text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50">
+                            {{ impact.label }}
+                          </label>
+                        </div>
+                        <input v-if="newEvent.impacts[impact.id]"
+                               v-model="newEvent.impactDetails[impact.id]"
+                               type="text"
+                               :placeholder="impact.placeholder"
+                               class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -921,7 +1195,14 @@
                   <button @click="editEventStatus(event)"
                           class="px-3 py-2 text-sm bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-lg hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors flex items-center space-x-2">
                     <span>⚙️</span>
-                    <span>Estado</span>
+                  </button>
+                  <button @click="editEvent(event)"
+                          class="px-3 py-2 text-sm bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 rounded-lg hover:bg-green-200 dark:hover:bg-green-800 transition-colors flex items-center space-x-2">
+                    <span>✏️</span>
+                  </button>
+                  <button @click="confirmDeleteEvent(event)"
+                          class="px-3 py-2 text-sm bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded-lg hover:bg-red-200 dark:hover:bg-red-800 transition-colors flex items-center space-x-2">
+                    <span>🗑️</span>
                   </button>
                   <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded">
                     Por: {{ event.registeredBy }}
@@ -1661,7 +1942,7 @@
           
           <!-- Header del Reporte -->
           <div class="p-0 print:p-0">
-            <div class="flex items-center justify-center text-center relative print:items-start">
+            <div class="flex items-center justify-center text-center relative print:items-start ">
 
               <!-- Logo -->
               <div class="absolute left-0 flex items-center justify-center 
@@ -2232,7 +2513,7 @@
                       <!-- Información de la comunidad -->
                       <div class="mb-8">
                         <h3
-                          class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-0 print:ring-1 print:ring-gray-100"
+                          class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-black"
                         >
                           📍 EVENTOS DE LA COMUNIDAD
                         </h3>
@@ -2252,7 +2533,7 @@
                             >
                               <div class="flex flex-wrap items-center gap-2 print:gap-1">
                                 <span
-                                  class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-black"
+                                  class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-white"
                                   >{{ event.code }}</span
                                 >
                                 <span
@@ -2339,7 +2620,7 @@
                                       ]"
                                     >
                                       {{ resource.name }}
-                                      <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-black">
+                                      <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-white">
                                         ({{ resource.specification }})
                                       </span>
                                     </span>
@@ -2480,17 +2761,22 @@ export default {
       showEndShiftModal: false,
       showAgentCodeModal: false,
       showEventStatusModal: false,
+      showEditEventModal: false,
+      showDeleteEventModal: false,
       showMapModal: false,
       showEventMapModal: false,
       showManualReportMapModal: false,
       selectedEvent: null,
+      eventToDelete: null,
       turnCode: '',
       turnCodeError: '',
       agentCode: '',
       agentCodeError: '',
       editingEvent: null,
+      editingEventData: null,
       editingEventStatus: '',
       editingEventResponseTime: null,
+      editAvailableNeighborhoods: [],
       tempCoordinates: { lat: null, lng: null },
       tempManualReportCoordinates: { lat: null, lng: null },
       modalMap: null,
@@ -2665,11 +2951,11 @@ export default {
           icon: '🚒',
           responseTime: 8,
           resources: [
-            { id: 'contraincedios', name: 'Contraincendio', available: 6 },
-            { id: 'ambulancia', name: 'Ambulancias', available: 4 },
+            { id: 'contraincedios', name: 'Contraincendio', available: 3 },
+            { id: 'ambulancia', name: 'Ambulancias', available: 2 },
             { id: 'pick_up', name: 'Pick-up', available: 3 },
-            { id: 'camion_cisterna', name: 'Camiones Cisterna', available: 3 },
-            { id: 'lanchas', name: 'Lanchas', available: 2 }
+            { id: 'lanchas', name: 'Lancha', available: 1 },
+            { id: 'jetski', name: 'Jetski', available: 1 }
           ]
         },
         {
@@ -2679,7 +2965,12 @@ export default {
           responseTime: 10,
           resources: [
             { id: 'ambulancias_copeco', name: 'Ambulancias', available: 3 },
-            { id: 'retro_copeco', name: 'Retroexcavadoras', available: 12 }
+            { id: 'retro_copeco', name: 'Retroexcavadoras', available: 1 },
+            { id: 'volqueta_copeco', name: 'Volqueta', available: 1 },
+            { id: 'pick_up_copeco', name: 'Pick-up', available: 3 },
+            { id: 'rino_copeco', name: 'Rinos', available: 2 },
+            { id: 'cuatri_copeco', name: 'Cuatri-Moto', available: 2 },
+            { id: 'lanchas_copeco', name: 'Lanchas', available: 2 }
           ]
         },
         {
@@ -2689,31 +2980,58 @@ export default {
           responseTime: 12,
           resources: [
             { id: 'ambulancias_cruz_roja', name: 'Ambulancias', available: 2 },
-            { id: 'pick_up', name: 'Pick-up', available: 3 },
+            { id: 'pick_up', name: 'Pick-up', available: 1 },
           ]
         }
       ],
       
       eventTypes: [
-        { id: 'seguridad', name: 'Incidente de Seguridad', code: 'SEG' },
-        { id: 'transito', name: 'Accidente de Tránsito', code: 'TRA' },
-        { id: 'incendio', name: 'Incendio', code: 'INC' },
-        { id: 'emergencia_medica', name: 'Emergencia Médica', code: 'MED' },
-        { id: 'vandalismo', name: 'Vandalismo', code: 'VAN' },
-        { id: 'disturbios', name: 'Disturbios Públicos', code: 'DIS' },
-        { id: 'robo', name: 'Robo/Hurto', code: 'ROB' },
-        { id: 'violencia', name: 'Violencia Doméstica', code: 'VDO' },
-        { id: 'servicio_publico', name: 'Falla Servicio Público', code: 'SER' },
-        { id: 'emergencia_ambiental', name: 'Emergencia Ambiental', code: 'AMB' }
-      ],
+  { id: 'incendio', name: 'Incendio', code: 'INC', priority: 'alta' },
+  { id: 'transito', name: 'Accidente de Tránsito', code: 'TRA', priority: 'alta' },
+  { id: 'emergencia_medica', name: 'Emergencia Médica', code: 'MED', priority: 'alta' },
+  { id: 'ahogamiento', name: 'Emergencia Marítima', code: 'MAR', priority: 'alta' },
+  { id: 'robo', name: 'Robo/Hurto', code: 'ROB', priority: 'alta' },
+  { id: 'agresion', name: 'Agresión/Riña', code: 'AGR', priority: 'alta' },
+  { id: 'violencia', name: 'Violencia Intrafamiliar', code: 'VIF', priority: 'alta' },
+  { id: 'agresion_sexual', name: 'Agresión Sexual', code: 'ASX', priority: 'alta' },
+  { id: 'explosion', name: 'Explosión', code: 'EXP', priority: 'alta' },
+  { id: 'colapso', name: 'Deslizamiento/Colapso', code: 'DES', priority: 'alta' },
+  { id: 'persona_crisis', name: 'Persona en Crisis', code: 'CRI', priority: 'media' },
+  { id: 'extraviado', name: 'Persona Extraviada', code: 'EXT', priority: 'media' },
+  { id: 'vandalismo', name: 'Vandalismo', code: 'VAN', priority: 'media' },
+  { id: 'animal_peligroso', name: 'Animal Peligroso', code: 'ANI', priority: 'media' },
+  { id: 'sospechoso', name: 'Actividad Sospechosa', code: 'SOS', priority: 'baja' },
+  { id: 'llamada_falsa', name: 'Llamada Falsa/Broma', code: 'FAKE', priority: 'baja' }
+],
       
-      impactTypes: [
-        { id: 'personas_afectadas', label: 'Personas Afectadas', placeholder: 'Número de personas' },
-        { id: 'vehiculos_involucrados', label: 'Vehículos Involucrados', placeholder: 'Número de vehículos' },
-        { id: 'calles_cerradas', label: 'Calles Cerradas', placeholder: 'Nombres de calles' },
-        { id: 'servicios_interrumpidos', label: 'Servicios Interrumpidos', placeholder: 'Tipos de servicio' },
-        { id: 'perdidas_materiales', label: 'Pérdidas Materiales', placeholder: 'Descripción de daños' },
-        { id: 'tiempo_interrupcion', label: 'Tiempo de Interrupción', placeholder: 'Duración estimada' }
+      impactCategories: [
+        { id: 'personas', label: 'Personas Afectadas', icon: '👥', bgClass: 'bg-red-50 dark:bg-red-900/20', impacts: [
+          { id: 'heridos', label: 'Heridos', placeholder: 'Ej: 3 heridos - 2 graves con fracturas, 1 leve con contusiones' },
+          { id: 'fallecidos', label: 'Fallecidos', placeholder: 'Ej: 1 fallecido masculino aprox. 40 años' },
+          { id: 'personas_atrapadas', label: 'Personas Atrapadas', placeholder: 'Ej: 2 personas atrapadas en vehículo, conscientes' },
+          { id: 'menores_involucrados', label: 'Menores Involucrados', placeholder: 'Ej: 1 menor de 8 años, ileso pero en shock' },
+          { id: 'evacuados', label: 'Evacuados', placeholder: 'Ej: 15 personas evacuadas del edificio adyacente' }
+        ]},
+        { id: 'vehiculos', label: 'Vehículos y Transporte', icon: '🚗', bgClass: 'bg-blue-50 dark:bg-blue-900/20', impacts: [
+          { id: 'vehiculos_involucrados', label: 'Vehículos Involucrados', placeholder: 'Ej: 2 autos sedan, 1 pickup - colisión frontal' },
+          { id: 'embarcaciones', label: 'Embarcaciones Afectadas', placeholder: 'Ej: Lancha de 20 pies a la deriva, 3 ocupantes' }
+        ]},
+        { id: 'infraestructura', label: 'Infraestructura', icon: '🏢', bgClass: 'bg-orange-50 dark:bg-orange-900/20', impacts: [
+          { id: 'vias_bloqueadas', label: 'Vías Bloqueadas', placeholder: 'Ej: Calle Principal cerrada entre 5ta y 7ma Av - ambos sentidos' },
+          { id: 'edificios_danados', label: 'Estructuras Dañadas', placeholder: 'Ej: Fachada de edificio comercial colapsada parcialmente' },
+          { id: 'servicios_interrumpidos', label: 'Servicios Interrumpidos', placeholder: 'Ej: Energía eléctrica cortada en 3 cuadras, poste caído' }
+        ]},
+        { id: 'riesgos', label: 'Riesgos Activos', icon: '⚠️', bgClass: 'bg-red-50 dark:bg-red-900/20', impacts: [
+          { id: 'incendio_activo', label: 'Incendio Activo', placeholder: 'Ej: Fuego en 2do piso, propagándose a techos vecinos' },
+          { id: 'materiales_peligrosos', label: 'Materiales Peligrosos', placeholder: 'Ej: Derrame de combustible aprox. 50 litros en calzada' },
+          { id: 'armas_involucradas', label: 'Armas Involucradas', placeholder: 'Ej: Arma de fuego calibre desconocido asegurada en escena' },
+          { id: 'riesgo_inminente', label: 'Riesgos Adicionales', placeholder: 'Ej: Cables eléctricos caídos energizados, riesgo de electrocución' }
+        ]},
+        { id: 'otros', label: 'Otros Impactos', icon: '🌊', bgClass: 'bg-gray-50 dark:bg-gray-700', impacts: [
+          { id: 'area_afectada', label: 'Área/Zona Afectada', placeholder: 'Ej: Área de 200m² aproximadamente, radio de 2 cuadras' },
+          { id: 'impacto_ambiental', label: 'Impacto Ambiental', placeholder: 'Ej: Contaminación de playa, mancha de aceite 50m²' },
+          { id: 'otros_impactos', label: 'Otros Impactos', placeholder: 'Ej: Información adicional relevante' }
+        ]}
       ],
       
       newEvent: {
@@ -2751,7 +3069,19 @@ export default {
         priority: '',
         community: '',
         shift: ''
-      }
+      },
+      
+      // Control de categorías expandidas
+      expandedCategories: {},
+      
+      // Control de categorías expandidas en modo edición
+      editExpandedCategories: {},
+      
+      // Variables para edición de eventos
+      editingEvent: null,
+      editingEventData: null,
+      editAvailableNeighborhoods: [],
+      showEditEventModal: false,
     }
   },
   
@@ -2759,6 +3089,16 @@ export default {
     currentShiftEvents() {
       if (!this.activeShift) return []
       return this.events.filter(event => event.shiftSupervisor === this.activeShift.supervisor)
+    },
+    
+    allImpacts() {
+      const impacts = []
+      this.impactCategories.forEach(category => {
+        category.impacts.forEach(impact => {
+          impacts.push(impact)
+        })
+      })
+      return impacts
     }
   },
   
@@ -2772,6 +3112,184 @@ export default {
   },
   
   methods: {
+    // Funciones para manejar categorías de impactos
+    toggleCategory(categoryId) {
+      this.expandedCategories[categoryId] = !this.expandedCategories[categoryId]
+    },
+    
+    getCategoryActiveCount(category) {
+      return category.impacts.filter(impact => this.newEvent.impacts[impact.id]).length
+    },
+    
+    isCategorySelected(category) {
+      return category.impacts.some(impact => this.newEvent.impacts[impact.id])
+    },
+    
+    toggleCategoryImpacts(category) {
+      const isSelected = this.isCategorySelected(category)
+      
+      if (isSelected) {
+        // Deseleccionar todos los impactos de esta categoría
+        category.impacts.forEach(impact => {
+          this.newEvent.impacts[impact.id] = false
+          this.newEvent.impactDetails[impact.id] = ''
+        })
+        // Colapsar la categoría automáticamente
+        this.expandedCategories[category.id] = false
+      } else {
+        // Expandir la categoría para que el usuario seleccione impactos
+        this.expandedCategories[category.id] = true
+      }
+    },
+    
+    // Funciones para manejar categorías de impactos en modo edición
+    toggleEditCategory(categoryId) {
+      this.editExpandedCategories[categoryId] = !this.editExpandedCategories[categoryId]
+    },
+    
+    getEditCategoryActiveCount(category) {
+      if (!this.editingEventData || !this.editingEventData.impacts) return 0
+      return category.impacts.filter(impact => this.editingEventData.impacts[impact.id]).length
+    },
+    
+    isEditCategorySelected(category) {
+      if (!this.editingEventData || !this.editingEventData.impacts) return false
+      return category.impacts.some(impact => this.editingEventData.impacts[impact.id])
+    },
+    
+    toggleEditCategoryImpacts(category) {
+      const isSelected = this.isEditCategorySelected(category)
+      
+      if (isSelected) {
+        // Deseleccionar todos los impactos de esta categoría
+        category.impacts.forEach(impact => {
+          this.editingEventData.impacts[impact.id] = false
+          this.editingEventData.impactDetails[impact.id] = ''
+        })
+        // Colapsar la categoría automáticamente
+        this.editExpandedCategories[category.id] = false
+      } else {
+        // Expandir la categoría para que el usuario seleccione impactos
+        this.editExpandedCategories[category.id] = true
+      }
+    },
+    
+    // Edit and delete event functions
+    editEvent(event) {
+      this.editingEvent = event
+      this.editingEventData = {
+        type: event.type,
+        code: event.code,
+        priority: event.priority,
+        location: {
+          community: event.location.community,
+          neighborhood: event.location.neighborhood,
+          reference: event.location.reference
+        },
+        coordinates: { ...event.coordinates },
+        // Inicializar afectaciones
+        impacts: { ...event.impacts } || {},
+        impactDetails: { ...event.impactDetails } || {},
+        // Inicializar instituciones y recursos
+        institutionsUsed: { ...event.institutionsUsed } || {},
+        resourcesUsed: { ...event.resourcesUsed } || {},
+        resourceSpecifications: { ...event.resourceSpecifications } || {},
+        responseTimeEstimated: { ...event.responseTimeEstimated } || {}
+      }
+      
+      // Inicializar categorías expandidas para edición
+      this.editExpandedCategories = {}
+      this.impactCategories.forEach(category => {
+        // Expandir categorías que tienen impactos seleccionados
+        if (category.impacts.some(impact => this.editingEventData.impacts[impact.id])) {
+          this.editExpandedCategories[category.id] = true
+        }
+      })
+      
+      this.onEditCommunityChange()
+      this.showEditEventModal = true
+    },
+
+    onEditCommunityChange() {
+      const community = this.communities.find(c => c.id === this.editingEventData.location.community)
+      this.editAvailableNeighborhoods = community ? community.neighborhoods : []
+      if (!this.editAvailableNeighborhoods.includes(this.editingEventData.location.neighborhood)) {
+        this.editingEventData.location.neighborhood = ''
+      }
+    },
+
+    updateEvent() {
+      if (this.editingEvent && this.editingEventData) {
+        // Update the event with new data
+        this.editingEvent.type = this.editingEventData.type
+        this.editingEvent.priority = this.editingEventData.priority
+        this.editingEvent.location = { ...this.editingEventData.location }
+        this.editingEvent.coordinates = { ...this.editingEventData.coordinates }
+        
+        // Actualizar afectaciones
+        this.editingEvent.impacts = { ...this.editingEventData.impacts }
+        this.editingEvent.impactDetails = { ...this.editingEventData.impactDetails }
+        
+        // Actualizar instituciones y recursos
+        this.editingEvent.institutionsUsed = { ...this.editingEventData.institutionsUsed }
+        this.editingEvent.resourcesUsed = { ...this.editingEventData.resourcesUsed }
+        this.editingEvent.resourceSpecifications = { ...this.editingEventData.resourceSpecifications }
+        this.editingEvent.responseTimeEstimated = { ...this.editingEventData.responseTimeEstimated }
+        
+        this.showEditEventModal = false
+        this.editingEvent = null
+        this.editingEventData = null
+        this.editAvailableNeighborhoods = []
+        this.editExpandedCategories = {}
+        this.updateDashboard()
+      }
+    },
+
+    confirmDeleteEvent(event) {
+      this.eventToDelete = event
+      this.showDeleteEventModal = true
+    },
+
+    deleteEvent() {
+      if (this.eventToDelete) {
+        const index = this.events.findIndex(e => e.code === this.eventToDelete.code)
+        if (index !== -1) {
+          this.events.splice(index, 1)
+        }
+        this.showDeleteEventModal = false
+        this.eventToDelete = null
+        this.updateDashboard()
+      }
+    },
+
+    // Función de modal personalizado (reemplaza alert, confirm, prompt)
+    showCustomModal(message, type = 'alert', onConfirm = null) {
+      const modal = document.createElement('div')
+      modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50'
+      
+      const buttons = type === 'confirm' 
+        ? `
+          <button class="px-4 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded mr-2" onclick="this.closest('.fixed').remove()">Cancelar</button>
+          <button class="px-4 py-2 bg-red-500 text-white hover:bg-red-600 rounded" onclick="this.closest('.fixed').remove(); if(window.customModalConfirm) window.customModalConfirm()">Confirmar</button>
+        `
+        : `<button class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 rounded" onclick="this.closest('.fixed').remove()">Aceptar</button>`
+      
+      modal.innerHTML = `
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4">
+          <p class="text-gray-700 dark:text-gray-300 mb-4">${message}</p>
+          <div class="flex justify-end">
+            ${buttons}
+          </div>
+        </div>
+      `
+      
+      if (onConfirm) {
+        window.customModalConfirm = onConfirm
+      }
+      
+      document.body.appendChild(modal)
+    },
+    
     // Verifica si hay al menos una institución con eventos
     hasInstitutionsWithEvents() {
       return this.institutions.some(institution => this.getEventsByInstitution(institution.id) > 0);
@@ -2845,7 +3363,7 @@ export default {
   Array.from(files).forEach(file => {
     // Verificar si el archivo es una imagen
     if (!file.type.match('image.*')) {
-      alert('Por favor, seleccione solo archivos de imagen.');
+      this.showCustomModal('Por favor, seleccione solo archivos de imagen.');
       return;
     }
 
@@ -3482,7 +4000,7 @@ removeSource(index) {
       if (event.impacts && event.impactDetails) {
         for (const [key, value] of Object.entries(event.impacts)) {
           if (value && event.impactDetails[key]) {
-            const impactType = this.impactTypes.find(i => i.id === key)
+            const impactType = this.allImpacts.find(i => i.id === key)
             if (impactType) {
               impacts.push(`${impactType.label}: ${event.impactDetails[key]}`)
             }
@@ -3675,7 +4193,7 @@ removeSource(index) {
     generateManualReport() {
       // Validar campos requeridos
       if (!this.manualReport.description || !this.manualReport.recommendations) {
-        alert('Por favor complete todos los campos obligatorios')
+        this.showCustomModal('Por favor complete todos los campos obligatorios')
         return
       }
       
@@ -4258,7 +4776,7 @@ removeSource(index) {
     width: 100% !important;
     padding: 10px 1.5cm !important;
     border-top: 2px solid #3b82f6 !important;
-    background-color: #eff6ff !important;
+    background-color: #ffffffff !important;
     z-index: 9999 !important;
     page-break-inside: avoid !important;
     text-align: center !important;
@@ -4364,7 +4882,7 @@ removeSource(index) {
     display: block !important;
     margin: 0 0 15px 0 !important;
     padding: 10px 0 !important;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #ffffffff;
     page-break-after: avoid;
   }
   
@@ -4387,7 +4905,7 @@ removeSource(index) {
     width: 100% !important;
     padding: 10px 1.5cm !important;
     border-top: 2px solid #3b82f6 !important;
-    background-color: #eff6ff !important;
+    background-color: #ffffffff !important;
     z-index: 9999 !important;
     page-break-inside: avoid !important;
     text-align: center !important;
@@ -4677,7 +5195,7 @@ canvas {
 
 .report-type-card {
   background: white;
-  border: 2px solid #e2e8f0;
+  border: 2px solid #ffffffff;
   border-radius: 1rem;
   padding: 1rem;
   cursor: pointer;
@@ -4697,7 +5215,7 @@ canvas {
 
 .report-type-card.active {
   border-color: #5D5CDE;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: linear-gradient(135deg, #ffffffff 0%, #ffffffff 100%);
 }
 
 .dark .report-type-card {

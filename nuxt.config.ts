@@ -38,7 +38,7 @@ export default defineNuxtConfig({
     public: {
       appName: 'Centro de Monitoreo',
       appVersion: '1.1.0',
-      apiBase: process.env.NUXT_PUBLIC_API_URL || 'http://localhost:4000' //process.env.NUXT_PUBLIC_API_URL ||  
+      apiBase: process.env.NUXT_PUBLIC_API_URLL || 'http://localhost:4000' //process.env.NUXT_PUBLIC_API_URL ||  
     }
   }
 })
