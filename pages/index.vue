@@ -1942,7 +1942,7 @@
           
           <!-- Header del Reporte -->
           <div class="p-0 print:p-0">
-            <div class="flex items-center justify-center text-center relative print:items-start ">
+            <div class="flex items-center justify-center text-center relative print:items-start">
 
               <!-- Logo -->
               <div class="absolute left-0 flex items-center justify-center 
@@ -4776,7 +4776,7 @@ removeSource(index) {
     width: 100% !important;
     padding: 10px 1.5cm !important;
     border-top: 2px solid #3b82f6 !important;
-    background-color: #ffffffff !important;
+    background-color: #eff6ff !important;
     z-index: 9999 !important;
     page-break-inside: avoid !important;
     text-align: center !important;
@@ -4882,7 +4882,7 @@ removeSource(index) {
     display: block !important;
     margin: 0 0 15px 0 !important;
     padding: 10px 0 !important;
-    border-bottom: 1px solid #ffffffff;
+    border-bottom: 1px solid #eee;
     page-break-after: avoid;
   }
   
@@ -4892,11 +4892,11 @@ removeSource(index) {
   
 @media print {
   @page {
-    size: A4;
+    size: letter;
     margin: 0;   /* Eliminar márgenes por defecto */
     size: auto;  /* Tamaño de página automático */
   }
-
+  
   .print-footer {
     display: block !important; 
     bottom: 0 !important;
@@ -4905,7 +4905,7 @@ removeSource(index) {
     width: 100% !important;
     padding: 10px 1.5cm !important;
     border-top: 2px solid #3b82f6 !important;
-    background-color: #ffffffff !important;
+    background-color: #eff6ff !important;
     z-index: 9999 !important;
     page-break-inside: avoid !important;
     text-align: center !important;
@@ -5195,7 +5195,7 @@ canvas {
 
 .report-type-card {
   background: white;
-  border: 2px solid #ffffffff;
+  border: 2px solid #e2e8f0;
   border-radius: 1rem;
   padding: 1rem;
   cursor: pointer;
@@ -5215,7 +5215,7 @@ canvas {
 
 .report-type-card.active {
   border-color: #5D5CDE;
-  background: linear-gradient(135deg, #ffffffff 0%, #ffffffff 100%);
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .dark .report-type-card {
