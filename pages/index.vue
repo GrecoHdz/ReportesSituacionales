@@ -1,6 +1,47 @@
 <template>
   <div id="app" class="dark:bg-gray-900 min-h-screen">
     
+    <!-- Modal de Autenticación -->
+    <div v-if="showAuthModal" class="modal fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+      <div class="modal-content bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg">
+            <img src="./Escudo_de_Roatan.png" 
+                   alt="Escudo de Roatan" 
+                   class="h-12 w-auto sm:h-14 md:h-16">
+          </div>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Centro de Monitoreo Avanzado</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Sistema Integrado de Reportes Situacionales</p>
+        </div>
+        
+        <form @submit.prevent="authenticate">
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              Clave de Acceso
+            </label>
+            <input v-model="authKey" type="password" required
+                   placeholder="Ingrese la clave de acceso"
+                   class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
+            <p v-if="authError" class="text-red-500 text-sm mt-1">{{ authError }}</p>
+          </div>
+          
+          <div class="mb-4">
+            <p class="text-xs text-gray-500 dark:text-gray-400 text-center">
+              Sistema de acceso restringido - Solo personal autorizado
+            </p>
+          </div>
+          
+          <div class="flex justify-end">
+            <button type="submit" class="btn-primary w-full">
+              Ingresar
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Contenido principal (solo visible si está autenticado) -->
+    <div v-if="isAuthenticated">
     <!-- Header del Dashboard para Impresión (solo para dashboard) -->
     <div v-if="activeTab === 'dashboard'" class="dashboard-print-header print:block hidden" style="display: none;">
       <div class="flex items-center justify-center text-center relative print:items-start">
@@ -2473,8 +2514,26 @@
                 <!-- Observaciones y Recomendaciones -->
                 <div class="mb-8">
                   <h3 class="text-[9px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-2 print:border-gray-300 print:ring-1 print:ring-gray-100">OBSERVACIONES</h3>
+                  
+                  <!-- Campo editable para observaciones (solo visible en pantalla) -->
+                  <div class="no-print mb-4">
+                    <div class="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-300 dark:border-gray-600">
+                      <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Anotaciones del Turno (incidentes, novedades, etc.)
+                      </label>
+                      <textarea 
+                        v-model="reportObservations" 
+                        rows="4"
+                        placeholder="Ingrese aquí cualquier incidente, novedad o información relevante del turno que no esté registrada en los eventos..."
+                        class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white resize-none"
+                        @input="saveObservations"></textarea> 
+                    </div>
+                  </div>
+                  
+                  <!-- Observaciones para impresión -->
                   <div class="bg-yellow-50 dark:bg-yellow-900/20 print:bg-white p-4 sm:p-6 rounded-lg border border-yellow-200 dark:border-yellow-800 print:border-0 print:ring-1 print:ring-gray-100">
-                    <div class="space-y-2 text-[12px]">
+                    <!-- Observaciones automáticas -->
+                    <div class="space-y-2 text-[12px] mb-4">
                       <p class="text-yellow-800 dark:text-yellow-200 print:text-black">
                         • Se registraron {{ events.length }} eventos durante el turno
                       </p>
@@ -2486,6 +2545,21 @@
                       </p>
                       <p class="text-yellow-800 dark:text-yellow-200 print:text-black" v-if="getEventsByPriorityFiltered('critica') > 0">
                         • Se atendieron {{ getEventsByPriorityFiltered('critica') }} eventos de prioridad crítica
+                      </p>
+                    </div>
+                    
+                    <!-- Observaciones personalizadas (si hay) -->
+                    <div v-if="reportObservations.trim()" class="mt-4 pt-4 border-t border-yellow-300 dark:border-yellow-700">
+                      <h4 class="text-sm font-semibold text-yellow-800 dark:text-yellow-200 print:text-black mb-2">Novedades:</h4>
+                      <div class="text-[12px] text-yellow-800 dark:text-yellow-200 print:text-black whitespace-pre-wrap">
+                        {{ reportObservations }}
+                      </div>
+                    </div>
+                    
+                    <!-- Mensaje si no hay observaciones personalizadas -->
+                    <div v-else class="mt-4 pt-4 border-t border-yellow-300 dark:border-yellow-700">
+                      <p class="text-xs text-yellow-600 dark:text-yellow-400 print:text-gray-500 italic">
+                        No se registraron observaciones adicionales del turno
                       </p>
                     </div>
                   </div>
@@ -2739,6 +2813,8 @@
       </div>
 
     </div>
+    </div>
+    <!-- Fin del contenido autenticado -->
   </div>
 </template>
 
@@ -2749,6 +2825,15 @@ export default {
   name: 'CentroMonitoreo',
   data() {
     return {
+      // Variables de autenticación
+      showAuthModal: true,
+      isAuthenticated: false,
+      authKey: '',
+      authError: '',
+      
+      // Observaciones editables del reporte
+      reportObservations: '',
+      
       sources: [],
       showSourceInput: false,
       newSource: '',
@@ -2841,95 +2926,142 @@ export default {
           name: 'Coxen Hole',
           population: 18000,
           neighborhoods: [
-            'El Swampo', 'Zona Comercial',
-            'Barrio El Manantial', 'Los Maestros', 'Coxen Cove',
-            'Franco Flat', 'Mant Trap', 'Zompopal', 'Spanish Town',
-            'Brass Hill', 'La Punta', 'Willie Warren', 'Loma Linda',
-            'Spring Garden 1', 'Spring Garden 2', 'Coconout Garden',
-            'New York', 'El Tiquet', 'Nicaragua', 'Palos Altos',
-            'Calle 8/ El Mercado', 'La Fe'
+            'Francourt FLat', 'El Triángulo',
+            'Barrio La Quema', 'New York', 'Nicaragua',
+            'Calle 8/ El Mercado', 'El Tiquet', 'El Swampo',
+            'La Punta', 'Palos Altos', 'El Centro', 'Zompopal', 
+            'Willie Warren', 'Calle Alivio', 'Guardiola', 'Puerto Crucero',
+            'Petrosun', 'Subida del Mono', 'Aeropuerto', 'Laguna Oxididación'
           ],
-          cameras: { total: 12, online: 11 }
-        },
-        {
-          id: 'frenchharbour',
-          name: 'French Harbour',
-          population: 14000,
-          neighborhoods: [
-            'Los Fuertes','La Punta', 'La Loma', 'FirstBight',
-            'El Bajo', 'La Rampla', 'La Bahia', 'Monte Placentero'
-          ],
-          cameras: { total: 10, online: 9 }
+          cameras: { total: 49, online: 49 }
         },
         {
           id: 'sandybay',
           name: 'Sandy Bay',
           population: 8000,
           neighborhoods: [
-            'Policarpo Galindo', 'Balfate', 'Bellavista', 'Cañaveral',
-            'Gibson Bigh', 'Las Gemelas', 'Lawson Rock', "Antony's Key",
-            'White Rock Hills', 'La Uva'
+            'Cañaveral', 'Los Maestros', 'Calle Bip', 'Calle Puerta Azul',
+            'Escuela Modelo', 'Desvío Super Ramirez', 'La Uva', 'Balfate',
+            'Antony\'s Key'
           ],
-          cameras: { total: 6, online: 6 }
+          cameras: { total: 34, online:34 }
+        },
+        {
+          id: 'gibsonbight',
+          name: 'Gibson Bight',
+          population: 8000,
+          neighborhoods: [
+            'Marina', 'Plaza Alba', 'Canchitas'
+          ],
+          cameras: { total: 16, online: 16 }
         },
         {
           id: 'westend',
           name: 'West End',
           population: 6000,
           neighborhoods: [
-            'Zona Hotelera', 'Playa Pública',
-            'Zona de Restaurantes', 'El Berinche', 'West End Village',
-            'Half Moon Bay', 'Mangrove Bight'
+            'Desvío West Bay', 'Rotonda',
+            'El Berrinche', 'Argentina Grill', 'Petrosun',
+            'Zona Viva', 'Brisas del Mar'
           ],
-          cameras: { total: 5, online: 5 }
+          cameras: { total: 36, online: 36 }
         },
         {
           id: 'westbay',
           name: 'West Bay',
           population: 5000,
           neighborhoods: [
-            'Resorts', 'Zona de Buceo', 'Playas Privadas', 'Área Residencial',
-            'Colonia Trejo y El Barrial', 'Villas Mackay', 'Residencial Merendon Hills',
-            'Infinity Bay Spa & Beach Resort', 'West Bay Village', 'Turtle Crossing',
-            'The Turrets', 'Lighthouse Estates'
+            'Desvío West End', 'Desvío Flowers Bay', 'Lenca World', 
+            'Arhini', 'Luna Beach', 'SouthShore Canopy',
+            'Entrada Fosters', 'Entrada Pública', 'Infinity', 'Playa'
           ],
-          cameras: { total: 4, online: 4 }
+          cameras: { total: 38, online: 38 }
         },
         {
           id: 'flowersbay',
           name: 'Flowers Bay',
           population: 4000,
           neighborhoods: [
-            'Calle Flowers Bay'
+            'Desvío West Bay', 'Canchitas', 'Entrada Pensacola'
           ],
-          cameras: { total: 3, online: 3 }
+          cameras: { total: 23, online: 23 }
         },
         {
-          id: 'frenchkey',
-          name: 'French Key',
+          id: 'gravelbay',
+          name: 'Gravel Bay',
           population: 4000,
           neighborhoods: [
-            'French Key', 'Little French Key'
+            'Entrada Colonia Las Brisas', 'Watering Place', 'Arnaldo Auld',
           ],
-          cameras: { total: 3, online: 3 }
+          cameras: { total: 18, online: 18 }
         },
-        {
+         {
           id: 'dixoncove',
           name: 'Dixon Cove',
           population: 4000,
           neighborhoods: [
-            'Dixon Cove', 'Isla Bonita', 'El Nance', 'Mahogany', 'Santa Maria', 'Dulce Maria'
+            'Bomberos', 'Calle BIP', 'Entrada Galaxy', 'Municipalidad',
+            'Entrada Santa Maria'
           ],
-          cameras: { total: 3, online: 3 }
+          cameras: { total: 33, online: 33 }
         },
         {
           id: 'brickbay',
           name: 'Brick Bay',
           population: 4000,
           neighborhoods: [
-            'Curacion', 'Brick Bay'
+            'Colonia Brick Bay', 'Curacion', 'Calle Escuela Brick Bay', 
+            'Rotonda', 'Cervecería'
           ],
-          cameras: { total: 3, online: 3 }
+          cameras: { total: 23, online: 23 }
+        },
+        {
+          id: 'bandanorte',
+          name: 'Banda Norte',
+          population: 4000,
+          neighborhoods: [
+            'Calle dirección a Rotonda', 'Desvío Marbella', 
+            'Escuela Hottest Sparrow', 'Corozal', 'MudHole' 
+          ],
+          cameras: { total: 21, online: 21 }
+        },
+        {
+          id: 'losfuertes',
+          name: 'Los Fuertes',
+          population: 4000,
+          neighborhoods: [
+          'La Bahía', 'Calle Rincón Placentero', 'Calle Entrada Estadio', 
+          'Calle Molineros', 'Mopleco'
+          ],
+          cameras: { total: 39, online: 39 }
+        },
+        {
+          id: 'frenchharbour',
+          name: 'French Harbour',
+          population: 14000,
+          neighborhoods: [
+            'Entrada Crawfish Rock', 'Calle Mall Megaplaza', 'La Loma', 'Calle Ace',
+            'Desvío Petrosun', 'Triangulo', 'La Loma', 'La Punta', 'Calle C.E.B Ruben Barahona'
+          ],
+          cameras: { total: 40, online: 40 }
+        },
+        {
+          id: 'frenchkey',
+          name: 'French Key',
+          population: 4000,
+          neighborhoods: [
+            'Calle BIP', 'Entrada Fantasy'
+          ],
+          cameras: { total: 7, online: 7 }
+        },
+        {
+          id: 'firstbight',
+          name: 'First Bight',
+          population: 4000,
+          neighborhoods: [
+            'Desvío Big Bight', 'Entrada José Santos Guardiola'
+          ],
+          cameras: { total: 6, online: 6 }
         }
       ],
       
@@ -3103,12 +3235,16 @@ export default {
   },
   
   mounted() {
-    this.updateDateTime()
-    setInterval(this.updateDateTime, 1000)
-    this.resetDashboardDates()
-    this.updateDashboard() 
-    this.initDarkMode()
-    this.loadChartsLibraries()
+    // Verificar si ya está autenticado (en localStorage)
+    const authStatus = localStorage.getItem('isAuthenticated')
+    if (authStatus === 'true') {
+      this.isAuthenticated = true
+      this.showAuthModal = false
+      this.initializeApp()
+    } else {
+      // Si no está autenticado, solo inicializar modo oscuro
+      this.initDarkMode()
+    }
   },
   
   methods: {
@@ -3487,6 +3623,64 @@ removeSource(index) {
           document.documentElement.classList.remove('dark')
         }
       })
+    },
+    
+    authenticate() {
+      if (this.authKey === '12345') {
+        this.isAuthenticated = true
+        this.showAuthModal = false
+        this.authError = ''
+        // Guardar estado de autenticación en localStorage
+        localStorage.setItem('isAuthenticated', 'true')
+        // Inicializar la aplicación después de autenticar
+        this.$nextTick(() => {
+          this.initializeApp()
+        })
+      } else {
+        this.authError = 'Clave incorrecta. Intente nuevamente.'
+        this.authKey = ''
+        setTimeout(() => {
+          this.authError = ''
+        }, 3000)
+      }
+    },
+    
+    initializeApp() {
+      // Inicializar fecha y hora
+      this.updateDateTime()
+      setInterval(this.updateDateTime, 1000)
+      
+      // Inicializar dashboard
+      this.resetDashboardDates()
+      this.updateDashboard()
+      
+      // Cargar observaciones guardadas
+      this.loadObservations()
+      
+      // Cargar librerías de gráficos
+      this.loadChartsLibraries()
+      
+      // Inicializar modo oscuro
+      this.initDarkMode()
+    },
+    
+    loadObservations() {
+      // Cargar observaciones guardadas en localStorage
+      const savedObservations = localStorage.getItem('reportObservations')
+      if (savedObservations) {
+        this.reportObservations = savedObservations
+      }
+    },
+    
+    saveObservations() {
+      // Guardar observaciones en localStorage
+      localStorage.setItem('reportObservations', this.reportObservations)
+    },
+    
+    clearObservations() {
+      // Limpiar observaciones
+      this.reportObservations = ''
+      localStorage.removeItem('reportObservations')
     },
     
     updateDateTime() {

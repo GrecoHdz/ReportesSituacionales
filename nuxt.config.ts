@@ -26,19 +26,5 @@ export default defineNuxtConfig({
         { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap' }
       ]
     }
-  },
-   // Server configuration 
-   devServer: {
-    host: '0.0.0.0',
-    port: process.env.PORT ? Number(process.env.PORT) : 3000 
-  },
-  
-  // Runtime config
-  runtimeConfig: {
-    public: {
-      appName: 'Centro de Monitoreo',
-      appVersion: '1.1.0',
-      apiBase: process.env.NUXT_PUBLIC_API_URLL || 'http://localhost:4000' //process.env.NUXT_PUBLIC_API_URL ||  
-    }
   }
 })
