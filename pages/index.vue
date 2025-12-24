@@ -757,8 +757,7 @@
 
 <!-- Footer del Dashboard para Impresión -->
 <div class="dashboard-print-footer print:block hidden">
-  <p>Municipalidad de Roatán</p>
-  <p>📞 Número de Emergencias: *1101</p>
+  <p>Municipalidad de Roatán</p> 
   <p><strong>Centro de Monitoreo Joseph Solomon</strong></p>
 </div>
 
@@ -2389,7 +2388,7 @@
                text-[10px] sm:text-sm md:text-base">
       DATOS GENERALES
     </h4>
-    <div class="flex-1 flex flex-col text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
+    <div class="flex-1 flex flex-col text-gray-900 dark:text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
       <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
       <p class="print:text-black"><strong>Inicio:</strong> {{ activeShift?.startTime || 'No disponible' }}</p>
       <p class="print:text-black"><strong>Cierre:</strong> {{ getCurrentDateTime() }}</p>
@@ -2406,7 +2405,7 @@
                text-[10px] sm:text-sm md:text-base">
       📈 ESTADÍSTICAS
     </h4>
-    <div class="flex-1 flex flex-col text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
+    <div class="flex-1 flex flex-col text-gray-900 dark:text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
       <p class="print:text-black"><strong>Tiempo Resp. Promedio:</strong> {{ getAverageResponseTimeFiltered() }} min</p>
       <p class="print:text-black"><strong>Recursos Desplegados:</strong> {{ getTotalResourcesDeployedFiltered() }}</p>
       <p class="print:text-black"><strong>Cámaras Activas:</strong> {{ getTotalOnlineCameras() }}/{{ getTotalCameras() }}</p>
@@ -2802,8 +2801,7 @@
                   </div>
                 </div>
 
-                <p>Municipalidad de Roatán</p>
-                <p>📞 Emergencias: *1101</p>
+                <p>Municipalidad de Roatán</p> 
                 <p class="mb-1"><strong>Centro de Monitoreo Joseph Solomon</strong></p>
               </div>
             </div>
@@ -2926,34 +2924,34 @@ export default {
           name: 'Coxen Hole',
           population: 18000,
           neighborhoods: [
-            'Francourt FLat', 'El Triángulo',
+            'Entrada Francourt FLat', 'El Triángulo',
             'Barrio La Quema', 'New York', 'Nicaragua',
-            'Calle 8/ El Mercado', 'El Tiquet', 'El Swampo',
+            'El Mercado', 'El Tiquet', 'El Suampo',
             'La Punta', 'Palos Altos', 'El Centro', 'Zompopal', 
             'Willie Warren', 'Calle Alivio', 'Guardiola', 'Puerto Crucero',
-            'Petrosun', 'Subida del Mono', 'Aeropuerto', 'Laguna Oxididación'
+            'Calle Food Court/Petrosun', 'Calle Subida del Mono', 'Calle Aeropuerto', 'Calle Laguna Oxididación'
           ],
-          cameras: { total: 49, online: 49 }
+          cameras: { total: 70, online: 70 }
         },
         {
           id: 'sandybay',
           name: 'Sandy Bay',
           population: 8000,
           neighborhoods: [
-            'Cañaveral', 'Los Maestros', 'Calle Bip', 'Calle Puerta Azul',
+            'Calle Cañaveral', 'Los Maestros', 'Calle Bip', 'Calle Puerta Azul',
             'Escuela Modelo', 'Desvío Super Ramirez', 'La Uva', 'Balfate',
             'Antony\'s Key'
           ],
-          cameras: { total: 34, online:34 }
+          cameras: { total: 39, online:39 }
         },
         {
           id: 'gibsonbight',
           name: 'Gibson Bight',
           population: 8000,
           neighborhoods: [
-            'Marina', 'Plaza Alba', 'Canchitas'
+            'Calle Marina', 'Plaza Alba', 'Calle Canchita', 'Acceso Playita'
           ],
-          cameras: { total: 16, online: 16 }
+          cameras: { total: 19, online: 19 }
         },
         {
           id: 'westend',
@@ -2964,25 +2962,25 @@ export default {
             'El Berrinche', 'Argentina Grill', 'Petrosun',
             'Zona Viva', 'Brisas del Mar'
           ],
-          cameras: { total: 36, online: 36 }
+          cameras: { total: 35, online: 35 }
         },
         {
           id: 'westbay',
           name: 'West Bay',
           population: 5000,
           neighborhoods: [
-            'Desvío West End', 'Desvío Flowers Bay', 'Lenca World', 
+            'Desvío West End/Flower Bay', 'Lenca World', 
             'Arhini', 'Luna Beach', 'SouthShore Canopy',
             'Entrada Fosters', 'Entrada Pública', 'Infinity', 'Playa'
           ],
-          cameras: { total: 38, online: 38 }
+          cameras: { total: 27, online: 27 }
         },
         {
           id: 'flowersbay',
           name: 'Flowers Bay',
           population: 4000,
           neighborhoods: [
-            'Desvío West Bay', 'Canchitas', 'Entrada Pensacola'
+            'Desvío West Bay', 'Calle Centro de Salud', 'Entrada Pensacola', 'Calle Petrosun'
           ],
           cameras: { total: 23, online: 23 }
         },
@@ -2993,25 +2991,25 @@ export default {
           neighborhoods: [
             'Entrada Colonia Las Brisas', 'Watering Place', 'Arnaldo Auld',
           ],
-          cameras: { total: 18, online: 18 }
+          cameras: { total: 22, online: 22 }
         },
          {
           id: 'dixoncove',
           name: 'Dixon Cove',
           population: 4000,
           neighborhoods: [
-            'Bomberos', 'Calle BIP', 'Entrada Galaxy', 'Municipalidad',
-            'Entrada Santa Maria'
+            'Calle Bomberos', 'Calle BIP', 'Entrada Galaxy', 'Municipalidad',
+            'Entrada Santa Maria', 'Calle Island Saloon'
           ],
-          cameras: { total: 33, online: 33 }
+          cameras: { total: 35, online: 35 }
         },
         {
           id: 'brickbay',
           name: 'Brick Bay',
           population: 4000,
           neighborhoods: [
-            'Colonia Brick Bay', 'Curacion', 'Calle Escuela Brick Bay', 
-            'Rotonda', 'Cervecería'
+            'Colonia Brick Bay', 'Calle Curacion', 'Calle Escuela Brick Bay', 
+            'Rotonda', 'Calle Cervecería'
           ],
           cameras: { total: 23, online: 23 }
         },
@@ -3030,7 +3028,7 @@ export default {
           name: 'Los Fuertes',
           population: 4000,
           neighborhoods: [
-          'La Bahía', 'Calle Rincón Placentero', 'Calle Entrada Estadio', 
+          'La Bahía', 'Calle Monte Placentero', 'Calle Entrada Estadio', 
           'Calle Molineros', 'Mopleco'
           ],
           cameras: { total: 39, online: 39 }
@@ -3074,7 +3072,7 @@ export default {
           resources: [
             { id: 'patrullas', name: 'Patrullas', available: 12 },
             { id: 'motocicletas', name: 'Motocicletas', available: 8 },
-            { id: 'agentes_tacticos', name: 'Agentes Tácticos', available: 15 }
+            { id: 'elementos', name: 'Elementos', available: 15 }
           ]
         },
         {
@@ -3133,7 +3131,17 @@ export default {
   { id: 'vandalismo', name: 'Vandalismo', code: 'VAN', priority: 'media' },
   { id: 'animal_peligroso', name: 'Animal Peligroso', code: 'ANI', priority: 'media' },
   { id: 'sospechoso', name: 'Actividad Sospechosa', code: 'SOS', priority: 'baja' },
-  { id: 'llamada_falsa', name: 'Llamada Falsa/Broma', code: 'FAKE', priority: 'baja' }
+  { id: 'llamada_falsa', name: 'Llamada Falsa/Broma', code: 'FAKE', priority: 'baja' },
+  { id: 'opertivo', name: 'Operativo', code:'OPT', priority: 'baja'}, 
+  // Infracciones Viales
+{ id: 'exceso_velocidad', name: 'Exceso de Velocidad', code: 'VEL', priority: 'baja' },
+{ id: 'estacionamiento_indebido', name: 'Estacionamiento Indebido', code: 'EST', priority: 'baja' },
+{ id: 'carrera_ilegal', name: 'Carrera Callejera Ilegal', code: 'CAR', priority: 'alta' },
+{ id: 'obstruccion_via', name: 'Obstrucción de Vía Pública', code: 'OBV', priority: 'media' },
+{ id: 'conduccion_imprudente', name: 'Conducción Imprudente', code: 'IMP', priority: 'media' },
+{ id: 'sobrecupo_pasajeros', name: 'Sobrecupo de Pasajeros', code: 'SOB', priority: 'media' },
+{ id: 'moto_sin_casco', name: 'Motocicleta sin Casco', code: 'CAS', priority: 'media' },
+{ id: 'vehiculo_abandonado', name: 'Vehículo Abandonado', code: 'VAB', priority: 'baja' }
 ],
       
       impactCategories: [
