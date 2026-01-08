@@ -10,8 +10,8 @@
                    alt="Escudo de Roatan" 
                    class="h-12 w-auto sm:h-14 md:h-16">
           </div>
-          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Centro de Monitoreo Avanzado</h2>
-          <p class="text-sm text-gray-600 dark:text-gray-400">Sistema Integrado de Reportes Situacionales</p>
+          <h2 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-2">Centro de Monitoreo Roatán</h2>
+          <p class="text-sm text-gray-600 dark:text-gray-400">Sistema de Reportes</p>
         </div>
         
         <form @submit.prevent="authenticate">
@@ -53,7 +53,7 @@
         <!-- Título del Reporte (centrado) -->
         <div class="flex-1 print:flex-grow print:text-center print:mx-0">
           <h1 class="text-sm sm:text-base md:text-xl font-bold text-gray-900 dark:text-white print:text-black print:text-lg">
-            Centro de Monitoreo Avanzado
+            Centro de Monitoreo Roatán
           </h1>
           <h2 class="text-[10px] sm:text-xs md:text-lg font-semibold text-gray-700 dark:text-gray-300 print:text-black print:text-sm">
             Dashboard de Estadísticas
@@ -76,8 +76,8 @@
                      class="h-10 w-auto sm:h-12 md:h-14 print:h-10 print:w-10">
             </div>
             <div class="text-center sm:text-left">
-              <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white">Centro de Monitoreo Avanzado</h1>
-              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Sistema Integrado de Reportes Situacionales</p>
+              <h1 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white">Centro de Monitoreo Roatán</h1>
+              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Sistema de Reportes</p>
             </div>
           </div>
 
@@ -194,7 +194,7 @@
         <form @submit.prevent="updateEventStatus">
           <div class="mb-4">
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Evento: {{ editingEvent?.code }}
+              Evento: {{ getEventTypeName(editingEvent?.type) }} {{ editingEvent?.camera ? '(CAM: ' + editingEvent.camera + ')' : '' }}
             </label>
             <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">{{ editingEvent?.description }}</p>
             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -230,7 +230,7 @@
     <!-- Modal de Editar Evento -->
     <div v-if="showEditEventModal" class="modal">
       <div class="modal-content p-4 sm:p-6 max-w-4xl">
-        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Editar Evento: {{ editingEvent?.code }}</h2>
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Editar Evento {{ editingEvent?.camera ? '(CAM: ' + editingEvent.camera + ')' : '' }}</h2>
         <form @submit.prevent="updateEvent" class="space-y-6">
           <!-- Información Básica -->
           <div class="input-group">
@@ -245,9 +245,9 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Código</label>
-                <input v-model="editingEventData.code" type="text" readonly
-                       class="w-full px-3 py-2 text-base bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg dark:text-white">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cámara</label>
+                <input v-model="editingEventData.camera" type="text"
+                       class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
               </div>
               <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prioridad</label>
@@ -423,7 +423,7 @@
       <div class="modal-content p-4 sm:p-6">
         <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Confirmar Eliminación</h2>
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
-          ¿Está seguro que desea eliminar el evento <strong>{{ eventToDelete?.code }}</strong>?
+          ¿Está seguro que desea eliminar el evento de tipo <strong>{{ getEventTypeName(eventToDelete?.type) }}</strong> {{ eventToDelete?.camera ? '(CAM: ' + eventToDelete.camera + ')' : '' }}?
         </p>
         <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
           Esta acción no se puede deshacer.
@@ -491,7 +491,7 @@
     <!-- Modal para Ver Evento en Mapa -->
     <div v-if="showEventMapModal" class="modal">
       <div class="modal-content modal-map-content p-4 sm:p-6">
-        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Ubicación del Evento: {{ selectedEvent?.code }}</h2>
+        <h2 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-4">Ubicación del Evento {{ selectedEvent?.camera ? '(CAM: ' + selectedEvent.camera + ')' : '' }}</h2>
         <div id="event-map" class="h-64 sm:h-96 lg:h-[500px] border-2 border-gray-200 dark:border-gray-600 rounded-lg mb-4"></div>
         <div v-if="selectedEvent" class="mb-4 text-sm text-gray-600 dark:text-gray-400">
           <strong>Ubicación:</strong> {{ getFullLocationText(selectedEvent.location) }}<br>
@@ -1016,9 +1016,10 @@
                   </select>
                 </div>
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Código (Automático)</label>
-                  <input v-model="newEvent.code" type="text" readonly
-                         class="w-full px-3 py-2 text-base bg-gray-100 dark:bg-gray-600 border border-gray-300 dark:border-gray-600 rounded-lg dark:text-white">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Cámara</label>
+                  <input v-model="newEvent.camera" type="text"
+                         placeholder="Número de cámara"
+                         class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary dark:bg-gray-700 dark:text-white">
                 </div>
                 <div>
                   <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Prioridad</label>
@@ -1104,7 +1105,7 @@
                                  v-model="newEvent.resourcesUsed[institution.id + '_' + resource.id]"
                                  :id="'res_' + institution.id + '_' + resource.id"
                                  class="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary">
-                          <label :for="'res_' + institution.id + '_' + resource.id" class="text-sm flex-1 font-medium ml-2">
+                          <label :for="'res_' + institution.id + '_' + resource.id" class="text-sm flex-1 font-medium ml-2 dark:text-gray-400">
                             {{ resource.name }}
                           </label>
                         </div>
@@ -2386,7 +2387,7 @@
               flex-1 text-left">
     <h4 class="font-bold text-blue-900 dark:text-blue-200 print:text-black mb-2 sm:mb-3 
                text-[10px] sm:text-sm md:text-base">
-      DATOS GENERALES
+      📊 DATOS GENERALES
     </h4>
     <div class="flex-1 flex flex-col text-gray-900 dark:text-white text-[8px] sm:text-xs md:text-sm print:text-[12px] space-y-1 print:space-y-2">
       <p class="print:text-black"><strong>Supervisor:</strong> {{ activeShift?.supervisor || 'No disponible' }}</p>
@@ -2484,8 +2485,8 @@
                     <table class="w-full border-collapse border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 text-white print:text-black print:text-[10px]">
                       <thead class="bg-gray-100 dark:bg-gray-700 print:bg-white"> 
                         <tr>
-                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Código</th>
-                         <!-- <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Hora</th> -->
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Cámara</th>
+                          <th class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Hora</th>
                           <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Tipo</th>
                           <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Prioridad</th>
                           <th class="border border-gray-300 dark:border-gray-600 print:border-0  print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-left print:text-black">Ubicación</th>
@@ -2496,8 +2497,8 @@
                       </thead>
                       <tbody>
                         <tr v-for="event in events" :key="event.code" class="hover:bg-gray-50 dark:hover:bg-gray-600 print:hover:bg-white">
-                          <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 font-mono text-xs print:text-black">{{ event.code }}</td>
-                       <!--  <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.time }}</td> -->
+                          <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.camera || '---' }}</td>
+                          <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.time }}</td>
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ getEventTypeName(event.type) }}</td>
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 print:text-black">{{ event.priority.toUpperCase() }}</td>
                           <td class="border border-gray-300 dark:border-gray-600 print:border-0 print:ring-1 print:ring-gray-100 px-2 sm:px-4 py-2 text-xs print:text-black">{{ getShortLocationText(event.location) }}</td>
@@ -2584,12 +2585,7 @@
                       </h4>
                       
                       <!-- Información de la comunidad -->
-                      <div class="mb-8">
-                        <h3
-                          class="text-[10px] sm:text-sm font-semibold mb-4 text-gray-900 dark:text-white print:text-black border-b-2 border-primary pb-2 print:border-b-black"
-                        >
-                          📍 EVENTOS DE LA COMUNIDAD
-                        </h3>
+                      <div class="mb-8"> 
 
                         <!-- Lista de eventos -->
                         <div class="space-y-4 print:space-y-2">
@@ -2606,35 +2602,35 @@
                             >
                               <div class="flex flex-wrap items-center gap-2 print:gap-1">
                                 <span
-                                  class="font-mono text-sm bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 rounded print:text-white"
-                                  >{{ event.code }}</span
+                                  v-if="event.camera"
+                                  class="bg-blue-100 dark:bg-blue-900 print:bg-gray-100 px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded text-black dark:text-white print:text-black"
+                                  >CAM: {{ event.camera }}</span
                                 >
                                 <span
-                                  class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
+                                  class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded text-black dark:text-white print:text-black"
                                   >{{ event.priority.toUpperCase() }}</span
                                 >
                                 <span
-                                  class="text-xs text-gray-600 dark:text-gray-400 print:text-black print:text-[0.65rem]"
+                                  class="text-xs text-gray-600 dark:text-gray-400 print:text-black text-black dark:text-white print:text-[0.65rem]"
                                   >{{ event.time }}</span
                                 >
                               </div>
                               <span
-                                class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded print:text-black"
+                                class="px-2 py-1 print:px-1 print:py-0 text-xs font-medium rounded text-black dark:text-white print:text-black"
                                 >{{ getStatusText(event.status) }}</span
                               >
                             </div>
 
-                            <p
-                              class="font-medium text-gray-900 dark:text-white print:text-black mb-1 print:mb-0.5"
-                            >
-                              {{ getEventTypeName(event.type) }}
-                            </p>
+                            <div class="mb-2 print:mb-1.5">
+                              <span 
+                                class="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 print:bg-gray-200 print:text-gray-800"
+                              >
+                                {{ getEventTypeName(event.type) }}
+                              </span>
+                            </div>
                             <p class="text-gray-600 dark:text-gray-300 print:text-black mb-1 print:mb-0.5">
                               <strong>Ubicación:</strong>
-                              {{ event.location.community ? `${event.location.community}` : '' }}{{ event.location.neighborhood ? ` - ${event.location.neighborhood}` : '' }}
-                              <span v-if="event.location.reference">
-                                - {{ event.location.reference }}
-                              </span>
+                              {{ getFullLocationText(event.location) }}
                             </p>
 
                             <!-- Instituciones y recursos por evento -->
@@ -2643,37 +2639,37 @@
                                 <strong>Instituciones y Recursos:</strong>
                               </p>
         
-                              <div class="space-y-1 print:space-y-0.5">
+                              <div class="space-y-0.5 print:space-y-0">
                                 <div 
                                   v-for="(institution, idx) in getEventInstitutions(event)" 
                                   :key="'inst-'+idx"
-                                  class="flex flex-wrap items-center gap-1"
+                                  class="flex flex-wrap items-center gap-x-1 gap-y-0.5"
                                 >
                                   <!-- Color dinámico según el índice -->
                                   <template v-if="idx % 4 === 0">
                                     <span 
-                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
+                                      class="text-[10px] sm:text-xs px-2 py-0.5 print:px-1 print:py-0 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
                                     >
                                       {{ institution.name }}
                                     </span>
                                   </template>
                                   <template v-else-if="idx % 4 === 1">
                                     <span 
-                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
+                                      class="text-[10px] sm:text-xs px-2 py-0.5 print:px-1 print:py-0 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
                                     >
                                       {{ institution.name }}
                                     </span>
                                   </template>
                                   <template v-else-if="idx % 4 === 2">
                                     <span 
-                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
+                                      class="text-[10px] sm:text-xs px-2 py-0.5 print:px-1 print:py-0 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200"
                                     >
                                       {{ institution.name }}
                                     </span>
                                   </template>
                                   <template v-else>
                                     <span 
-                                      class="text-xs px-2 py-1 print:px-1 print:py-0 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
+                                      class="text-[10px] sm:text-xs px-2 py-0.5 print:px-1 print:py-0 rounded-full bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200"
                                     >
                                       {{ institution.name }}
                                     </span>
@@ -2685,7 +2681,7 @@
                                       v-if="resource.fullId && resource.fullId.startsWith(institution.id + '_')"
                                       :key="'res-'+idx+'-'+rIdx"
                                       :class="[
-                                        'text-xs px-2 py-1 print:px-1 print:py-0 rounded-full',
+                                        'text-[10px] sm:text-xs px-2 py-0.5 print:px-1 print:py-0 rounded-full',
                                         idx % 4 === 0 ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
                                         idx % 4 === 1 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' :
                                         idx % 4 === 2 ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200' :
@@ -2693,7 +2689,7 @@
                                       ]"
                                     >
                                       {{ resource.name }}
-                                      <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-white">
+                                      <span v-if="resource.specification" class="ml-1 print:ml-0.5 text-gray-600 dark:text-gray-300 print:text-black">
                                         ({{ resource.specification }})
                                       </span>
                                     </span>
@@ -2980,7 +2976,8 @@ export default {
           name: 'Flowers Bay',
           population: 4000,
           neighborhoods: [
-            'Desvío West Bay', 'Calle Centro de Salud', 'Entrada Pensacola', 'Calle Petrosun'
+            'Desvío West Bay', 'Calle Centro de Salud', 
+            'Entrada Pensacola', 'Calle Petrosun', 'Calle Biblioteca'
           ],
           cameras: { total: 23, online: 23 }
         },
@@ -3041,7 +3038,7 @@ export default {
             'Entrada Crawfish Rock', 'Calle Mall Megaplaza', 'La Loma', 'Calle Ace',
             'Desvío Petrosun', 'Triangulo', 'La Loma', 'La Punta', 'Calle C.E.B Ruben Barahona'
           ],
-          cameras: { total: 40, online: 40 }
+          cameras: { total: 38, online: 38 }
         },
         {
           id: 'frenchkey',
@@ -3136,16 +3133,18 @@ export default {
   // Infracciones Viales
 { id: 'exceso_velocidad', name: 'Exceso de Velocidad', code: 'VEL', priority: 'baja' },
 { id: 'estacionamiento_indebido', name: 'Estacionamiento Indebido', code: 'EST', priority: 'baja' },
-{ id: 'carrera_ilegal', name: 'Carrera Callejera Ilegal', code: 'CAR', priority: 'alta' },
+{ id: 'carrera_ilegal', name: 'Carrera Callejera', code: 'CAR', priority: 'alta' },
 { id: 'obstruccion_via', name: 'Obstrucción de Vía Pública', code: 'OBV', priority: 'media' },
 { id: 'conduccion_imprudente', name: 'Conducción Imprudente', code: 'IMP', priority: 'media' },
 { id: 'sobrecupo_pasajeros', name: 'Sobrecupo de Pasajeros', code: 'SOB', priority: 'media' },
-{ id: 'moto_sin_casco', name: 'Motocicleta sin Casco', code: 'CAS', priority: 'media' },
+{ id: 'moto_sin_casco', name: 'Motocicleta sin Casco', code: 'CAS', priority: 'baja' },
+{ id: 'contravia', name: 'Vehículo Contravía', code: 'CON', priority: 'media' },
 { id: 'vehiculo_abandonado', name: 'Vehículo Abandonado', code: 'VAB', priority: 'baja' }
 ],
       
       impactCategories: [
         { id: 'personas', label: 'Personas Afectadas', icon: '👥', bgClass: 'bg-red-50 dark:bg-red-900/20', impacts: [
+          { id: 'involucrados', label: 'Involucrados', placeholder: 'Ej: 3 personas involucradas' },
           { id: 'heridos', label: 'Heridos', placeholder: 'Ej: 3 heridos - 2 graves con fracturas, 1 leve con contusiones' },
           { id: 'fallecidos', label: 'Fallecidos', placeholder: 'Ej: 1 fallecido masculino aprox. 40 años' },
           { id: 'personas_atrapadas', label: 'Personas Atrapadas', placeholder: 'Ej: 2 personas atrapadas en vehículo, conscientes' },
@@ -3191,7 +3190,8 @@ export default {
         responseTimeEstimated: {},
         impacts: {},
         impactDetails: {},
-        status: 'en_progreso'
+        status: 'en_progreso',
+        camera: ''
       },
       
       pendingEvent: null,
@@ -3338,7 +3338,8 @@ export default {
         institutionsUsed: { ...event.institutionsUsed } || {},
         resourcesUsed: { ...event.resourcesUsed } || {},
         resourceSpecifications: { ...event.resourceSpecifications } || {},
-        responseTimeEstimated: { ...event.responseTimeEstimated } || {}
+        responseTimeEstimated: { ...event.responseTimeEstimated } || {},
+        camera: event.camera || ''
       }
       
       // Inicializar categorías expandidas para edición
@@ -3379,6 +3380,7 @@ export default {
         this.editingEvent.resourcesUsed = { ...this.editingEventData.resourcesUsed }
         this.editingEvent.resourceSpecifications = { ...this.editingEventData.resourceSpecifications }
         this.editingEvent.responseTimeEstimated = { ...this.editingEventData.responseTimeEstimated }
+        this.editingEvent.camera = this.editingEventData.camera
         
         this.showEditEventModal = false
         this.editingEvent = null
@@ -3986,16 +3988,14 @@ removeSource(index) {
       }
       
       this.modalMap = L.map('modal-map', {
-        zoomControl: false,
+        zoomControl: true,
         scrollWheelZoom: true,
-        doubleClickZoom: false,
-        boxZoom: false,
-        keyboard: false,
-        touchZoom: true
+        dragging: true,
+        touchZoom: true,
+        attributionControl: false
       }).setView([16.3291, -86.5392], 12)
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        zoomControl: true
+        attributionControl: false
       }).addTo(this.modalMap)
       
       let marker = null
@@ -4024,13 +4024,11 @@ removeSource(index) {
       }
       
       this.manualReportMap = L.map('manual-report-map', {
-        zoomControl: true,  // Mostrar el control de zoom
-        attributionControl: true // Desactivar el control de atribución
+        zoomControl: true,
+        attributionControl: false
       }).setView([16.3291, -86.5392], 12)
       
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(this.manualReportMap)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(this.manualReportMap)
       
       let marker = null
       this.manualReportMap.on('click', (e) => {
@@ -4068,10 +4066,10 @@ removeSource(index) {
       const lat = this.selectedEvent.coordinates.lat
       const lng = this.selectedEvent.coordinates.lng
       
-      this.eventMap = L.map('event-map').setView([lat, lng], 15)
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(this.eventMap)
+      this.eventMap = L.map('event-map', {
+        attributionControl: false
+      }).setView([lat, lng], 15)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(this.eventMap)
       
       const marker = L.marker([lat, lng]).addTo(this.eventMap)
       marker.bindPopup(`
@@ -4094,13 +4092,11 @@ removeSource(index) {
           const lng = this.manualReport.coordinates.lng
           
           this.reportMap = L.map('report-map', {
-            zoomControl: false,  // Desactivar controles de zoom
-            attributionControl: false // Desactivar control de atribución
+            zoomControl: false,
+            attributionControl: false
           }).setView([lat, lng], 13)
           
-          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-          }).addTo(this.reportMap)
+          L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(this.reportMap)
           
           const marker = L.marker([lat, lng]).addTo(this.reportMap)
           marker.bindPopup(`
@@ -4148,10 +4144,10 @@ removeSource(index) {
       if (!mapElement || typeof L === 'undefined') return
 
       try {
-        const miniMap = L.map(mapId).setView([event.coordinates.lat, event.coordinates.lng], 15)
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-          attribution: '© OpenStreetMap contributors'
-        }).addTo(miniMap)
+        const miniMap = L.map(mapId, {
+          attributionControl: false
+        }).setView([event.coordinates.lat, event.coordinates.lng], 15)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(miniMap)
         
         const marker = L.marker([event.coordinates.lat, event.coordinates.lng]).addTo(miniMap)
         marker.bindPopup(`<strong>${event.code}</strong><br>${this.getEventTypeName(event.type)}`)
@@ -4241,6 +4237,11 @@ removeSource(index) {
     },
     
     getFilteredEvents() {
+      // Si hay turno activo y no hay fechas seleccionadas, mostrar solo eventos del turno actual
+      if (this.activeShift && !this.dashboardStartDate && !this.dashboardEndDate) {
+        return this.events
+      }
+
       let allEvents = [...this.allEvents]
       if (this.activeShift) {
         allEvents = [...allEvents, ...this.events]
@@ -4803,9 +4804,9 @@ removeSource(index) {
   .flex-wrap {
     display: flex !important;
     flex-wrap: wrap !important;
-    gap: 0.75rem !important; /* igual a gap-3 */
     justify-content: flex-start !important;
     align-items: flex-start !important;
+    line-height: 1 !important;
   }
 
   /* Evitar que los elementos se corten entre páginas */
@@ -4906,7 +4907,7 @@ removeSource(index) {
       margin-bottom: 0.25rem !important;
     }
     
-    .px-2.py-1 {
+    .px-2.py-1, .px-2.py-0.5 {
       padding: 1px 2px !important;
     }
     
